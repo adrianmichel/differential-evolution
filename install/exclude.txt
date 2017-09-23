@@ -1,0 +1,16 @@
+doc_src
+install
+*.scc
+*.ncb
+*.vp*
+*.vss*
+*.vtg
+*.vpj
+de_test\Debug
+de_test\Release
+*.ilk
+*.pdb
+*.SCC
+*.vspscc
+*.user
+*.suo

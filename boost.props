@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <BoostDir>$(SolutionDir)..\boost</BoostDir>
+    <BoostInclude>$(BoostDir)</BoostInclude>
+    <BoostLib>$(BoostDir)\stage\$(PlatformTarget)\lib</BoostLib>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="BoostDir">
+      <Value>$(BoostDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoostInclude">
+      <Value>$(BoostInclude)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoostLib">
+      <Value>$(BoostLib)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

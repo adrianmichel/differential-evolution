@@ -1,0 +1,149 @@
+﻿<html>
+<head>
+<title>c:\dev\de\de_test\tutorial.cpp</title>
+<style>
+body { background-color: #ffffff; font-family: "Lucida Console"; font-size:8.0pt; font-style: normal; font-weight: normal; text-decoration: none; }
+.se2 { color: #000000; background-color: #ffffff; } /* Window Text */
+.se17 { color: #800080; background-color: #ffffff; } /* Keyword */
+.se19 { color: #000080; background-color: #ffffff; } /* Number */
+.se20 { color: #008080; background-color: #ffffff; } /* String */
+.se22 { color: #808000; background-color: #ffffff; } /* Preprocessor */
+.se23 { color: #800000; background-color: #ffffff; } /* Punctuation */
+.se24 { color: #c04000; background-color: #ffffff; } /* Library Symbol */
+.se25 { color: #000000; background-color: #ffffff; } /* Operator */
+.se28 { color: #000000; background-color: #ffffff; font-weight: bolder; } /* Function */
+.se50 { color: #004080; background-color: #ffffff; font-style: italic; } /* Comment */
+.se55 { color: #000000; background-color: #ffffff; } /* Window Text */
+.se56 { color: #303080; background-color: #ffffff; } /* Number */
+</style>
+</head>
+<body>
+<pre>
+<span class="se22">#include</span><span class="se2"> </span><span class="se23">&lt;</span><span class="se2">differential_evolution.hpp</span><span class="se23">&gt;</span>
+<span class="se22">#include</span><span class="se2"> </span><span class="se20">&quot;objective_function.h&quot;</span>
+
+<span class="se17">using</span><span class="se2"> </span><span class="se17">namespace</span><span class="se2"> </span><span class="se55">de</span><span class="se25">;</span>
+
+<span class="se50">/** </span>
+<span class="se50"> * Objective function to optimize is the &quot;sphere function&quot;: </span>
+<span class="se50"> *  </span>
+<span class="se50"> * f(x,y) = x^2 + y^2 </span>
+<span class="se50">*/</span>
+<span class="se17">class</span><span class="se2"> </span><span class="se55">sphere_function</span><span class="se2"> </span><span class="se25">:</span><span class="se2"> </span><span class="se17">public</span><span class="se2"> </span><span class="se55">objective_function</span>
+<span class="se23">{</span>
+<span class="se17">public</span><span class="se25">:</span>
+<span class="se2">    </span><span class="se28">sphere_function</span><span class="se2">()</span>
+<span class="se2">    </span><span class="se25">:</span><span class="se2"> </span><span class="se28">objective_function</span><span class="se2">( </span><span class="se20">&quot;sphere function&quot;</span><span class="se2"> )</span>
+<span class="se2">    </span><span class="se23">{</span>
+<span class="se2">    </span><span class="se23">}</span>
+
+<span class="se2">    </span><span class="se17">virtual</span><span class="se2"> </span><span class="se17">double</span><span class="se2"> </span><span class="se17">operator</span><span class="se2">()( </span><span class="se55">de</span><span class="se25">::</span><span class="se55">DVectorPtr</span><span class="se2"> </span><span class="se55">args</span><span class="se2"> )</span>
+<span class="se2">    </span><span class="se23">{</span>
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * The two function arguments are the elements index 0 and 1 in </span>
+<span class="se50">         * the argument vector, as defined by the constraints vector </span>
+<span class="se50">         * below </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se17">double</span><span class="se2"> </span><span class="se55">x</span><span class="se2"> </span><span class="se25">=</span><span class="se2"> (</span><span class="se25">*</span><span class="se55">args</span><span class="se2">)</span><span class="se23">[</span><span class="se2"> </span><span class="se19">0</span><span class="se2"> </span><span class="se23">]</span><span class="se25">;</span>
+<span class="se2">        </span><span class="se17">double</span><span class="se2"> </span><span class="se55">y</span><span class="se2"> </span><span class="se25">=</span><span class="se2"> (</span><span class="se25">*</span><span class="se55">args</span><span class="se2">)</span><span class="se23">[</span><span class="se2"> </span><span class="se19">1</span><span class="se2"> </span><span class="se23">]</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se17">return</span><span class="se2"> </span><span class="se55">x</span><span class="se25">*</span><span class="se55">x</span><span class="se2"> </span><span class="se25">+</span><span class="se2"> </span><span class="se55">y</span><span class="se25">*</span><span class="se55">y</span><span class="se25">;</span>
+<span class="se2">    </span><span class="se23">}</span>
+<span class="se23">}</span><span class="se25">;</span>
+
+<span class="se22">#define</span><span class="se2"> </span><span class="se55">VARS_COUNT</span><span class="se2"> </span><span class="se19">20</span>
+<span class="se22">#define</span><span class="se2"> </span><span class="se55">POPULATION_SIZE</span><span class="se2"> </span><span class="se19">200</span>
+
+<span class="se17">void</span><span class="se2"> </span><span class="se28">simpleUsage</span><span class="se2">()</span>
+<span class="se23">{</span>
+<span class="se2">    </span><span class="se17">try</span>
+<span class="se2">    </span><span class="se23">{</span>
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Create and initialize the constraints object </span>
+<span class="se50">         *  </span>
+<span class="se50">         * First create it with default constraints (double type, min </span>
+<span class="se50">         * -1.0e6, max 1.0e6) then set the first two elements to be of </span>
+<span class="se50">         *  type real with x between -10, 10 and y between -100, 100.</span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">constraints_ptr</span><span class="se2"> </span><span class="se28">constraints</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">constraints</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se55">VARS_COUNT</span><span class="se2"> , </span><span class="se25">-</span><span class="se56">1.0e6</span><span class="se2">, </span><span class="se56">1.0e6</span><span class="se2"> ) )</span><span class="se25">;</span>
+<span class="se2">        (</span><span class="se25">*</span><span class="se55">constraints</span><span class="se2">)</span><span class="se23">[</span><span class="se2"> </span><span class="se19">0</span><span class="se2"> </span><span class="se23">]</span><span class="se2"> </span><span class="se25">=</span><span class="se2"> </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">real_constraint</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se25">-</span><span class="se19">10</span><span class="se2">, </span><span class="se19">10</span><span class="se2"> )</span><span class="se25">;</span>
+<span class="se2">        (</span><span class="se25">*</span><span class="se55">constraints</span><span class="se2">)</span><span class="se23">[</span><span class="se2"> </span><span class="se19">1</span><span class="se2"> </span><span class="se23">]</span><span class="se2"> </span><span class="se25">=</span><span class="se2"> </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">real_constraint</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se25">-</span><span class="se19">100</span><span class="se2">, </span><span class="se19">100</span><span class="se2"> )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate the objective function </span>
+<span class="se50">         *  </span>
+<span class="se50">         * The objective function can be any function or functor that </span>
+<span class="se50">         * takes a de::DVectorPtr as argument and returns a double. It </span>
+<span class="se50">         * can be passed as a reference, pointer or shared pointer. </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">objective_function_ptr</span><span class="se2"> </span><span class="se28">of</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">sphere_function</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">() )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate two null listeners, one for the differential </span>
+<span class="se50">         * evolution, the other one for the processors </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">listener_ptr</span><span class="se2"> </span><span class="se28">listener</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">null_listener</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">() )</span><span class="se25">;</span>
+<span class="se2">        </span><span class="se55">processor_listener_ptr</span><span class="se2"> </span><span class="se28">processor_listener</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">null_processor_listener</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">() )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate the collection of processors with the number of </span>
+<span class="se50">         * parallel processors (4), the objective function and the </span>
+<span class="se50">         * listener </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">processors</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">objective_function_ptr</span><span class="se2"> </span><span class="se25">&gt;::</span><span class="se55">processors_ptr</span><span class="se2"> </span><span class="se28">_processors</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">processors</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">objective_function_ptr</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se19">4</span><span class="se2">, </span><span class="se55">of</span><span class="se2">, </span><span class="se55">processor_listener</span><span class="se2"> ) )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate a simple termination strategy wich will stop the </span>
+<span class="se50">         * optimization process after 10000 generations </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">termination_strategy_ptr</span><span class="se2"> </span><span class="se28">terminationStrategy</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">max_gen_termination_strategy</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se19">10000</span><span class="se2"> ) )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate the selection strategy - we'll use the best of </span>
+<span class="se50">         * parent/child strategy </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">selection_strategy_ptr</span><span class="se2"> </span><span class="se28">selectionStrategy</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">best_parent_child_selection_strategy</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">() )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate the mutation strategy - we'll use the mutation </span>
+<span class="se50">         * strategy 1 with the weight and crossover factors set to 0.5 </span>
+<span class="se50">         * and 0.9 respectively </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">mutation_strategy_arguments</span><span class="se2"> </span><span class="se28">mutation_arguments</span><span class="se2">( </span><span class="se56">0.5</span><span class="se2">, </span><span class="se56">0.9</span><span class="se2"> )</span><span class="se25">;</span>
+<span class="se2">        </span><span class="se55">mutation_strategy_ptr</span><span class="se2"> </span><span class="se28">mutationStrategy</span><span class="se2">( </span><span class="se55">boost</span><span class="se25">::</span><span class="se55">make_shared</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">mutation_strategy_1</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2">( </span><span class="se55">VARS_COUNT</span><span class="se2">, </span><span class="se55">mutation_arguments</span><span class="se2"> ) )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Instantiate the differential evolution using the previously </span>
+<span class="se50">         * defined constraints, processors, listener, and the various </span>
+<span class="se50">         * strategies </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">differential_evolution</span><span class="se25">&lt;</span><span class="se2"> </span><span class="se55">objective_function_ptr</span><span class="se2"> </span><span class="se25">&gt;</span><span class="se2"> </span><span class="se28">de</span><span class="se2">( </span><span class="se55">VARS_COUNT</span><span class="se2">, </span><span class="se55">POPULATION_SIZE</span><span class="se2">, </span><span class="se55">_processors</span><span class="se2">, </span><span class="se55">constraints</span><span class="se2">, </span><span class="se17">true</span><span class="se2">, </span><span class="se55">terminationStrategy</span><span class="se2">, </span><span class="se55">selectionStrategy</span><span class="se2">, </span><span class="se55">mutationStrategy</span><span class="se2">, </span><span class="se55">listener</span><span class="se2"> )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Run the optimization process</span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">de</span><span class="se2">.</span><span class="se28">run</span><span class="se2">()</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Get the best individual resulted from the optimization </span>
+<span class="se50">         * process </span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se55">individual_ptr</span><span class="se2"> </span><span class="se28">best</span><span class="se2">( </span><span class="se55">de</span><span class="se2">.</span><span class="se28">best</span><span class="se2">() )</span><span class="se25">;</span>
+
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Print out the result</span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se24">std</span><span class="se25">::</span><span class="se24">cout</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se20">&quot;minimum value for the &quot;</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se55">of</span><span class="se25">-&gt;</span><span class="se28">name</span><span class="se2">() </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se20">&quot; is &quot;</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se55">best</span><span class="se25">-&gt;</span><span class="se28">cost</span><span class="se2">() </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se20">&quot; for x=&quot;</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> (</span><span class="se25">*</span><span class="se55">best</span><span class="se25">-&gt;</span><span class="se28">vars</span><span class="se2">())</span><span class="se23">[</span><span class="se2"> </span><span class="se19">0</span><span class="se2"> </span><span class="se23">]</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se20">&quot;, y=&quot;</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> (</span><span class="se25">*</span><span class="se55">best</span><span class="se25">-&gt;</span><span class="se28">vars</span><span class="se2">())</span><span class="se23">[</span><span class="se2"> </span><span class="se19">1</span><span class="se2"> </span><span class="se23">]</span><span class="se25">;</span>
+<span class="se2">    </span><span class="se23">}</span>
+<span class="se2">    </span><span class="se17">catch</span><span class="se2">( </span><span class="se17">const</span><span class="se2"> </span><span class="se24">std</span><span class="se25">::</span><span class="se24">exception</span><span class="se25">&amp;</span><span class="se2"> </span><span class="se55">e</span><span class="se2"> )</span>
+<span class="se2">    </span><span class="se23">{</span>
+<span class="se2">        </span><span class="se50">/**</span>
+<span class="se50">         * Print out any errors that happened during the initialization </span>
+<span class="se50">         * or optimization phases</span>
+<span class="se50">         */</span>
+<span class="se2">        </span><span class="se24">std</span><span class="se25">::</span><span class="se24">cout</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se20">&quot;an error occurred: &quot;</span><span class="se2"> </span><span class="se25">&lt;&lt;</span><span class="se2"> </span><span class="se55">e</span><span class="se2">.</span><span class="se28">what</span><span class="se2">()</span><span class="se25">;</span>
+<span class="se2">    </span><span class="se23">}</span>
+<span class="se23">}</span>
+</pre>
+</body>
+</html>

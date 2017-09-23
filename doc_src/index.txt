@@ -1,0 +1,51 @@
+/*! \mainpage Differential Evolution
+ *
+
+	- \subpage overview
+	- \subpage tutorial
+	- \subpage de_test
+	- \subpage library
+	- \subpage contact
+	- \subpage credits
+
+*/
+
+/*! \page overview Overview
+
+	Go to \ref library page for information on where to get the library and what's included in the package.<br/><br/>
+	\htmlinclude overview.htm
+*/
+
+/*! \page tutorial Tutorial
+
+<p>The following functional sample shows how to set up and run a basic DE optimization session. Only default implementations of listeners and various policy classes have been used to avoid distracting the reader with irrelevant details. In real applications, some or all of the classes used in this sample can be replaced with more useful implementations.</p>
+
+<p>A more realistic use is presented in the downloadable project which can be used to test DE with several functions that are commonly used to assess the efficiency of optimization algorithms.</p>     
+
+\htmlinclude sample.htm
+
+*/
+
+/*! \page library The library
+\htmlinclude library.htm
+*/
+
+/*! \page credits Credits
+
+Many thanks to <b>Kenneth Price and Rainer Storn</b> for creating and popularizing the Differential Evolution optimization algorithm.
+
+This library was inspired by Dr. Rainer Storn's C++ implementation published at http://www.icsi.berkeley.edu/~storn/code.html .
+
+The library uses components from the latest boost release (1.48.0 as of this writing) such as thread, tokenizer, tuple, shared_ptr, etc - http://www.boost.org .
+
+The documentation was generated with Doxygen V 1.7.5.1 - http://www.doxygen.org .
+*/
+
+
+/*! \page contact Contact
+Email info@amichel.com with questions, feedback, feature requests
+*/
+
+/*! \page de_test The test project (de_test)
+	\htmlinclude de_test.htm
+*/
