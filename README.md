@@ -49,8 +49,8 @@ This component is intended to address the need for a standardized generic, porta
 ### Features of this implementation
 
 * Generic - doesn't make assumptions about the OS, environment it's running in or the problem to optimize
-* Written in 100% portable C++, with boost and stl as only dependencies
-* Header only project
+* Written in 100% portable C++14, with stl as only dependence
+* Single-header project
 * Modular
 * Robust and memory efficient due to extensive use of shared pointers
 * Performant thanks to platform independent multi-processing
@@ -105,9 +105,7 @@ The following functional sample shows how to set up and run a basic DE optimizat
 A more realistic use is presented in the downloadable project which can be used to test DE with several functions that are commonly used to assess the efficiency of optimization algorithms.
 
 
-```
-#!C++
-
+```c++
 #include <differential_evolution.hpp>
 #include "objective_function.h"
 
