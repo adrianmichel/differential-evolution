@@ -27,9 +27,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 
-#include <de_constraints.hpp>
-#include <mutation_strategy.hpp>
-#include <selection_strategy.hpp>
+#include <differential_evolution.hpp>
 
 #include "objective_function.h"
 

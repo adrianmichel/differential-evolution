@@ -19,8 +19,7 @@
 
 #include <memory>
 
-#include <de_types.hpp>
-#include <processors.hpp>
+#include <differential_evolution.hpp>
 
 /**
  * Abstract base class for concrete objective functions.
