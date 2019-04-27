@@ -11,9 +11,9 @@
 #pragma once
 
 #include <boost/scope_exit.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/utility.hpp>
+#include <memory>
 #include <queue>
 
 #include "individual.hpp"
@@ -161,7 +161,7 @@ class null_processor_listener : public processor_listener {
 /**
  * A pointer to a processor listener
  */
-typedef boost::shared_ptr<processor_listener> processor_listener_ptr;
+typedef std::shared_ptr<processor_listener> processor_listener_ptr;
 
 /**
  * Exception thrown in case of an error in the objective
@@ -207,7 +207,7 @@ class objective_function_factory {
   /**
    * Defines a type pointer to an objective function
    */
-  typedef boost::shared_ptr<T> T_ptr;
+  typedef std::shared_ptr<T> T_ptr;
 
   /**
    * virtual distructor
@@ -266,10 +266,10 @@ class processor_traits<T*> {
  * @author adrian (12/15/2011)
  */
 template <typename T>
-class processor_traits<boost::shared_ptr<T> > {
+class processor_traits<std::shared_ptr<T> > {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  typedef std::shared_ptr<T> value_type;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(value_type t) { return t; }
   // \endcond
@@ -286,7 +286,7 @@ template <typename T>
 class processor_traits<objective_function_factory<T>*> {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  typedef std::shared_ptr<T> value_type;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(objective_function_factory<T>* off) {
     return off->make();
@@ -301,13 +301,13 @@ class processor_traits<objective_function_factory<T>*> {
  * @author adrian (12/15/2011)
  */
 template <typename T>
-class processor_traits<boost::shared_ptr<objective_function_factory<T> > > {
+class processor_traits<std::shared_ptr<objective_function_factory<T> > > {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  typedef std::shared_ptr<T> value_type;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(
-      boost::shared_ptr<objective_function_factory<T> > off) {
+      std::shared_ptr<objective_function_factory<T> > off) {
     return off->make();
   }
   // \endcond
@@ -324,7 +324,7 @@ template <typename T>
 class processor_traits<objective_function_factory<T>&> {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  typedef std::shared_ptr<T> value_type;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(objective_function_factory<T>& off) {
     return off.make();
@@ -343,7 +343,7 @@ class processor_traits<objective_function_factory<T>&> {
  * @author adrian (12/1/2011)
  */
 template <typename T>
-class processor : boost::noncopyable {
+class processor {
  private:
   typename processor_traits<T>::value_type m_of;
   individual_queue& m_indQueue;
@@ -375,6 +375,10 @@ class processor : boost::noncopyable {
         m_index(index) {
     assert(listener);
   }
+
+  // Instead of write class processor : boost::noncopyable
+  processor(const processor&) = delete;
+  processor& operator=(const processor&) = delete;
 
   /**
    * runs the objective function on the object at the top of the
@@ -449,10 +453,10 @@ class processors_exception : exception {
 template <typename T>
 class processors {
  private:
-  typedef boost::shared_ptr<boost::thread_group> thread_group_ptr;
-  typedef boost::shared_ptr<processor<T> > processor_ptr;
+  typedef std::shared_ptr<boost::thread_group> thread_group_ptr;
+  typedef std::shared_ptr<processor<T> > processor_ptr;
   typedef std::vector<processor_ptr> processor_vector;
-  typedef boost::shared_ptr<T> T_ptr;
+  typedef std::shared_ptr<T> T_ptr;
 
  private:
   individual_queue m_indQueue;
@@ -475,7 +479,7 @@ class processors {
     assert(listener);
 
     for (size_t n = 0; n < count; ++n) {
-      processor_ptr processor(boost::make_shared<processor<T> >(
+      processor_ptr processor(std::make_shared<processor<T> >(
           n, of, boost::ref(m_indQueue), listener));
       m_processors.push_back(processors<T>::processor_ptr(processor));
     }
@@ -498,7 +502,7 @@ class processors {
   void start() {
     // create a new group every time, don't bother removing all individual
     // threads
-    m_threads = boost::make_shared<boost::thread_group>();
+    m_threads = std::make_shared<boost::thread_group>();
 
     for (typename processor_vector::size_type n = 0; n < m_processors.size();
          ++n) {
@@ -557,7 +561,7 @@ class processors {
   /**
    * A smart pointer to a collection of processors
    */
-  typedef boost::shared_ptr<processors<T> > processors_ptr;
+  typedef std::shared_ptr<processors<T> > processors_ptr;
 };
 
 }  // namespace de

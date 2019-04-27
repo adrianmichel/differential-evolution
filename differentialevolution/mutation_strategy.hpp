@@ -14,7 +14,7 @@
 
 #define URN_DEPTH 5
 
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 namespace amichel {
 namespace de {
@@ -169,7 +169,7 @@ class mutation_strategy {
   /**
    * type for the tuple returned by the operator() member.
    */
-  typedef boost::tuple<individual_ptr, de::DVectorPtr> mutation_info;
+  typedef std::tuple<individual_ptr, de::DVectorPtr> mutation_info;
 
   /**
    * performs the mutation
@@ -226,7 +226,7 @@ class mutation_strategy {
   double dither() const { return m_args.dither(); }
 };
 
-typedef boost::shared_ptr<mutation_strategy> mutation_strategy_ptr;
+typedef std::shared_ptr<mutation_strategy> mutation_strategy_ptr;
 
 /**
  * Mutation strategy #1
@@ -265,8 +265,8 @@ class mutation_strategy_1 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(boost::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(boost::make_shared<individual>(*pop[i]->vars()));
+    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
+    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -325,8 +325,8 @@ class mutation_strategy_2 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(boost::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(boost::make_shared<individual>(*pop[i]->vars()));
+    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
+    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -386,8 +386,8 @@ class mutation_strategy_3 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(boost::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(boost::make_shared<individual>(*pop[i]->vars()));
+    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
+    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -448,8 +448,8 @@ class mutation_strategy_4 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(boost::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(boost::make_shared<individual>(*pop[i]->vars()));
+    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
+    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -512,8 +512,8 @@ class mutation_strategy_5 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(boost::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(boost::make_shared<individual>(*pop[i]->vars()));
+    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
+    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds

@@ -10,11 +10,8 @@
 
 #pragma once
 
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/scope_exit.hpp>
-#include <boost/shared_array.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
+#include <tuple>
 
 #include "individual.hpp"
 #include "listener.hpp"
@@ -99,8 +96,8 @@ class differential_evolution {
 
       : m_varCount(varCount),
         m_popSize(popSize),
-        m_pop1(boost::make_shared<population>(popSize, varCount, constraints)),
-        m_pop2(boost::make_shared<population>(popSize, varCount)),
+        m_pop1(std::make_shared<population>(popSize, varCount, constraints)),
+        m_pop2(std::make_shared<population>(popSize, varCount)),
         m_bestInd(m_pop1->best(minimize)),
         m_constraints(constraints),
         m_processors(processors),
@@ -152,10 +149,10 @@ class differential_evolution {
           mutation_strategy::mutation_info mutationInfo(
               (*m_mutationStrategy)(*m_pop1, bestIndIteration, i));
 
-          individual_ptr tmpInd(boost::tuples::get<0>(mutationInfo));
+          individual_ptr tmpInd(std::get<0>(mutationInfo));
 
           tmpInd->ensureConstraints(m_constraints,
-                                    boost::tuples::get<1>(mutationInfo));
+                                    std::get<1>(mutationInfo));
 
           // populate the queue
           m_processors->push(tmpInd);
@@ -181,8 +178,7 @@ class differential_evolution {
         m_listener->endGeneration(genCount, bestIndIteration, m_bestInd);
       }
 
-      BOOST_SCOPE_EXIT_TPL((m_listener)) { m_listener->end(); }
-      BOOST_SCOPE_EXIT_END
+		  m_listener->end();
     } catch (const processors_exception&) {
       m_listener->error();
       throw differential_evolution_exception();

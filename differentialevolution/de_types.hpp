@@ -76,7 +76,7 @@ typedef std::vector<Double> DVector;
 /**
  * shared pointer to a DVector
  */
-typedef boost::shared_ptr<DVector> DVectorPtr;
+typedef std::shared_ptr<DVector> DVectorPtr;
 
 /**
  * de exception conforms to the C++ standard (MS implementation

@@ -46,7 +46,7 @@ class FunctionToOptimize {
 /**
  * Shared pointer to a FunctionToOptimize
  */
-typedef boost::shared_ptr<FunctionToOptimize> FunctionToOptimizePtr;
+typedef std::shared_ptr<FunctionToOptimize> FunctionToOptimizePtr;
 
 /**
  * Command line class

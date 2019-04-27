@@ -112,7 +112,7 @@ class listener {
 /**
  * A smart pointer to a Listener
  */
-typedef boost::shared_ptr<listener> listener_ptr;
+typedef std::shared_ptr<listener> listener_ptr;
 
 /**
  * A concrete Listener that ignores all received events

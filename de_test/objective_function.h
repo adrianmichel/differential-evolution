@@ -17,7 +17,7 @@
 #pragma once
 #endif
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <de_types.hpp>
 #include <processors.hpp>
@@ -86,6 +86,6 @@ class objective_function {
 /**
  * Smart pointer to an objective function
  */
-typedef boost::shared_ptr<objective_function> objective_function_ptr;
+typedef std::shared_ptr<objective_function> objective_function_ptr;
 
 #endif  // DE_OBJECTIVE_FUNCTION_HPP_INCLUDED

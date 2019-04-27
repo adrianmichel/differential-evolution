@@ -13,9 +13,10 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/tokenizer.hpp>
 #include <set>
+#include <functional>
+#include <memory>
 
 #include "de_types.hpp"
 #include "random_generator.hpp"
@@ -127,7 +128,7 @@ class constraint {
 /**
  * A smart pointer to a Constraint
  */
-typedef boost::shared_ptr<constraint> constraint_ptr;
+typedef std::shared_ptr<constraint> constraint_ptr;
 
 /**
  * Base class for constraints that are range based. Each such
@@ -354,7 +355,7 @@ class int_constraint : public range_constraint {
  */
 class set_constraint : public constraint {
  private:
-  class unique : public std::unary_function<Double, bool> {
+  class unique : public std::function<bool(Double)> {
    public:
     bool operator()(Double d) const { return m_unique.insert(d).second; }
 
@@ -552,7 +553,7 @@ class constraints : public constraints_base {
    */
   constraints(size_t varCount, double defMin, double defMax)
       : constraints_base(varCount,
-                         boost::make_shared<real_constraint>(defMin, defMax)) {}
+                         std::make_shared<real_constraint>(defMin, defMax)) {}
 
   /**
    * Initializes a collection of constraints from string
@@ -583,7 +584,7 @@ class constraints : public constraints_base {
   constraints(const std::vector<std::string>& str, size_t var_count,
               double def_min, double def_max)
       : constraints_base(
-            var_count, boost::make_shared<real_constraint>(def_min, def_max)) {
+            var_count, std::make_shared<real_constraint>(def_min, def_max)) {
     for (std::vector<std::string>::size_type i = 0; i < str.size(); ++i) {
       tokenizer tokens(str[i], separator(";,"));
 
@@ -699,7 +700,7 @@ class constraints : public constraints_base {
     assert(sidePct > 0 && sidePct <= 100);
 
     if (origin->size() == constraints_base::size()) {
-      DVectorPtr square(boost::make_shared<DVector>(origin->size()));
+      DVectorPtr square(std::make_shared<DVector>(origin->size()));
 
       for (constraints_base::size_type n = 0; n < constraints_base::size(); ++n)
         (*square)[n] =
@@ -714,7 +715,7 @@ class constraints : public constraints_base {
   }
 
   DVectorPtr get_middle_point() {
-    DVectorPtr r(boost::make_shared<DVector>(constraints_base::size()));
+    DVectorPtr r(std::make_shared<DVector>(constraints_base::size()));
 
     for (constraints_base::size_type n = 0; n < constraints_base::size(); ++n)
       (*r)[n] = (*this)[n]->get_middle_point();
@@ -731,7 +732,7 @@ class constraints : public constraints_base {
    * @return DVectorPtr
    */
   DVectorPtr get_rand_values() const {
-    DVectorPtr r(boost::make_shared<DVector>(constraints_base::size()));
+    DVectorPtr r(std::make_shared<DVector>(constraints_base::size()));
 
     for (constraints_base::size_type n = 0; n < constraints_base::size(); ++n)
       (*r)[n] = (*this)[n]->get_rand_value();
@@ -743,16 +744,16 @@ class constraints : public constraints_base {
   constraint_ptr str_to_constraint(const std::string& type, double min,
                                    double max) {
     if (boost::to_lower_copy(type) == "real")
-      return boost::make_shared<real_constraint>(min, max);
+      return std::make_shared<real_constraint>(min, max);
     else if (boost::to_lower_copy(type) == "int" ||
              boost::to_lower_copy(type) == "integer")
-      return boost::make_shared<int_constraint>(min, max);
+      return std::make_shared<int_constraint>(min, max);
     else
       throw constraints_exception(
           (boost::format("invalid constraint type \"%1%\"") % type).str());
   }
 };
 
-typedef boost::shared_ptr<constraints> constraints_ptr;
+typedef std::shared_ptr<constraints> constraints_ptr;
 }  // namespace de
 }  // namespace amichel

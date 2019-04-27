@@ -51,9 +51,9 @@ void simpleUsage() {
      *  type real with x between -10, 10 and y between -100, 100.
      */
     constraints_ptr constraints(
-        boost::make_shared<constraints>(VARS_COUNT, -1.0e6, 1.0e6));
-    (*constraints)[0] = boost::make_shared<real_constraint>(-10, 10);
-    (*constraints)[1] = boost::make_shared<real_constraint>(-100, 100);
+        std::make_shared<constraints>(VARS_COUNT, -1.0e6, 1.0e6));
+    (*constraints)[0] = std::make_shared<real_constraint>(-10, 10);
+    (*constraints)[1] = std::make_shared<real_constraint>(-100, 100);
 
     /**
      * Instantiate the objective function
@@ -68,9 +68,9 @@ void simpleUsage() {
      * Instantiate two null listeners, one for the differential
      * evolution, the other one for the processors
      */
-    listener_ptr listener(boost::make_shared<null_listener>());
+    listener_ptr listener(std::make_shared<null_listener>());
     processor_listener_ptr processor_listener(
-        boost::make_shared<null_processor_listener>());
+        std::make_shared<null_processor_listener>());
 
     /**
      * Instantiate the collection of processors with the number of
@@ -78,7 +78,7 @@ void simpleUsage() {
      * listener
      */
     processors<sphere_function>::processors_ptr _processors(
-        boost::make_shared<processors<sphere_function> >(4, boost::ref(of),
+        std::make_shared<processors<sphere_function> >(4, boost::ref(of),
                                                          processor_listener));
 
     /**
@@ -86,14 +86,14 @@ void simpleUsage() {
      * optimization process after 10000 generations
      */
     termination_strategy_ptr terminationStrategy(
-        boost::make_shared<max_gen_termination_strategy>(10000));
+        std::make_shared<max_gen_termination_strategy>(10));
 
     /**
      * Instantiate the selection strategy - we'll use the best of
      * parent/child strategy
      */
     selection_strategy_ptr selectionStrategy(
-        boost::make_shared<best_parent_child_selection_strategy>());
+        std::make_shared<best_parent_child_selection_strategy>());
 
     /**
      * Instantiate the mutation strategy - we'll use the mutation
@@ -102,7 +102,7 @@ void simpleUsage() {
      */
     mutation_strategy_arguments mutation_arguments(0.5, 0.9);
     mutation_strategy_ptr mutationStrategy(
-        boost::make_shared<mutation_strategy_1>(VARS_COUNT,
+        std::make_shared<mutation_strategy_1>(VARS_COUNT,
                                                 mutation_arguments));
 
     /**
