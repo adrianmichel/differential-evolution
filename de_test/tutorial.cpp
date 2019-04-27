@@ -41,7 +41,7 @@ class sphere_function {
 #define VARS_COUNT 20
 #define POPULATION_SIZE 200
 
-void simpleUsage() {
+int main() {
   try {
     /**
      * Create and initialize the constraints object
@@ -78,7 +78,7 @@ void simpleUsage() {
      * listener
      */
     processors<sphere_function>::processors_ptr _processors(
-        std::make_shared<processors<sphere_function> >(4, boost::ref(of),
+        std::make_shared<processors<sphere_function> >(4, std::ref(of),
                                                          processor_listener));
 
     /**
@@ -86,7 +86,7 @@ void simpleUsage() {
      * optimization process after 10000 generations
      */
     termination_strategy_ptr terminationStrategy(
-        std::make_shared<max_gen_termination_strategy>(10));
+        std::make_shared<max_gen_termination_strategy>(10000));
 
     /**
      * Instantiate the selection strategy - we'll use the best of
@@ -138,4 +138,6 @@ void simpleUsage() {
      */
     std::cout << "an error occurred: " << e.what();
   }
+
+  system("pause");
 }
