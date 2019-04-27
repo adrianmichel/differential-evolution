@@ -10,7 +10,6 @@
 
 #include <differential_evolution.hpp>
 #include <iostream>
-#include <listener.hpp>
 
 #include "cmdline.h"
 #include "testfunctions.h"
