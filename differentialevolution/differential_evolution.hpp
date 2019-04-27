@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <tuple>
+#include <cassert>
 
 #include "individual.hpp"
 #include "listener.hpp"
@@ -178,7 +179,7 @@ class differential_evolution {
         m_listener->endGeneration(genCount, bestIndIteration, m_bestInd);
       }
 
-		  m_listener->end();
+      m_listener->end();
     } catch (const processors_exception&) {
       m_listener->error();
       throw differential_evolution_exception();

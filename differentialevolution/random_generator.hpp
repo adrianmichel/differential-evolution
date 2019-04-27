@@ -10,30 +10,24 @@
 
 #pragma once
 
-#include <boost/math/special_functions/round.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
-#include <boost/random/variate_generator.hpp>
+#include <random>
+#include <cmath>
 
 namespace amichel {
 namespace de {
 
 inline double genrand(double min = 0, double max = 1) {
-  static boost::random::mt19937 gen;
-  boost::random::uniform_real_distribution<> dist(min, max);
-  boost::variate_generator<boost::random::mt19937&,
-                           boost::random::uniform_real_distribution<double> >
-      value(gen, dist);
+  static std::mt19937 gen;
+  std::uniform_real_distribution<double> dist(min, max);
 
-  return value();
+  return dist(gen);
 }
 
 inline int genintrand(double min, double max, bool upperexclusive = false) {
   assert(min < max);
   int ret = 0;
   do
-    ret = boost::math::round(genrand(min, max));
+    ret = std::round(genrand(min, max));
   while (ret < min || ret > max || upperexclusive && ret == max);
   return ret;
 }

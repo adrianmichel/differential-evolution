@@ -10,11 +10,9 @@
 
 #pragma once
 
-#include <boost/scope_exit.hpp>
-#include <boost/thread.hpp>
-#include <boost/utility.hpp>
 #include <memory>
 #include <queue>
+#include <thread>
 
 #include "individual.hpp"
 #include "population.hpp"
@@ -399,10 +397,7 @@ class processor {
       }
       m_result = true;
 
-      BOOST_SCOPE_EXIT_TPL((&m_index)(&m_listener)) {
-        m_listener->end(m_index);
-      }
-      BOOST_SCOPE_EXIT_END
+	  m_listener->end(m_index);
     } catch (const objective_function_exception& e) {
       m_result = false;
       m_listener->error(m_index, e.what());
@@ -453,7 +448,7 @@ class processors_exception : exception {
 template <typename T>
 class processors {
  private:
-  typedef std::shared_ptr<boost::thread_group> thread_group_ptr;
+  typedef std::shared_ptr<std::vector<std::thread> > thread_group_ptr;
   typedef std::shared_ptr<processor<T> > processor_ptr;
   typedef std::vector<processor_ptr> processor_vector;
   typedef std::shared_ptr<T> T_ptr;
@@ -480,7 +475,7 @@ class processors {
 
     for (size_t n = 0; n < count; ++n) {
       processor_ptr processor(std::make_shared<processor<T> >(
-          n, of, boost::ref(m_indQueue), listener));
+          n, of, std::ref(m_indQueue), listener));
       m_processors.push_back(processors<T>::processor_ptr(processor));
     }
   }
@@ -502,13 +497,12 @@ class processors {
   void start() {
     // create a new group every time, don't bother removing all individual
     // threads
-    m_threads = std::make_shared<boost::thread_group>();
+    m_threads = std::make_shared<std::vector<std::thread>>();
 
     for (typename processor_vector::size_type n = 0; n < m_processors.size();
          ++n) {
       processor_ptr p(m_processors[n]);
-      boost::thread* th(new boost::thread(boost::ref(*p)));
-      m_threads->add_thread(th);
+      m_threads->emplace_back(std::ref(*p));
     }
   }
 
@@ -520,7 +514,8 @@ class processors {
    * @author adrian (12/4/2011)
    */
   void wait() {
-    m_threads->join_all();
+    for (auto& i : *m_threads)
+      i.join();
 
     if (!m_indQueue.empty())
       throw processors_exception("threads ended before emptying the queue");

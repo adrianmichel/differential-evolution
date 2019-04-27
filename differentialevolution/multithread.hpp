@@ -10,12 +10,13 @@
 
 #pragma once
 
-#include <boost/thread.hpp>
+#include <thread>
+#include <mutex>
 
 namespace amichel {
 namespace de {
-typedef boost::recursive_mutex mutex;
-typedef boost::lock_guard<boost::recursive_mutex> lock;
+typedef std::mutex mutex;
+typedef std::lock_guard<mutex> lock;
 
 }  // namespace de
 }  // namespace amichel

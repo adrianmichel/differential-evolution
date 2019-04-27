@@ -11,6 +11,7 @@
 #pragma once
 
 #include <queue>
+#include <sstream>
 
 #include "de_constraints.hpp"
 #include "de_types.hpp"

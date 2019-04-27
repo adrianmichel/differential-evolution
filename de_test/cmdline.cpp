@@ -263,7 +263,7 @@ bool CmdLine::process(int argc, char* argv[]) {
                 .str());
 
       assert(vm.count(CONSTRAINTS_LONG) > 0);
-      _constraints = std::make_shared<amichel::de::constraints>(
+      _constraints = std::make_shared<amichel::de::constraints_str>(
           vm[CONSTRAINTS_LONG].as<std::vector<std::string> >(), _argumentsCount,
           argumentsDefConstraintMin, argumentsDefConstraintMax);
 

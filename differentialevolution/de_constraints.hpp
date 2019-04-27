@@ -10,13 +10,11 @@
 
 #pragma once
 
-#include <boost/algorithm/string.hpp>
-#include <boost/format.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/tokenizer.hpp>
+#include <sstream>
 #include <set>
 #include <functional>
 #include <memory>
+#include <cmath>
 
 #include "de_types.hpp"
 #include "random_generator.hpp"
@@ -299,18 +297,18 @@ class int_constraint : public range_constraint {
    * @return double
    */
   double get_rand_value(double value, double origin) {
-    double ret = boost::math::round(value);
+    double ret = std::round(value);
 
     while (ret < range_constraint::min()) {
       ret = range_constraint::min() +
             genrand() * (origin - range_constraint::min());
-      ret = boost::math::round(ret);
+      ret = std::round(ret);
     }
 
     while (ret > range_constraint::max()) {
       ret = range_constraint::max() +
             genrand() * (origin - range_constraint::max());
-      ret = boost::math::round(ret);
+      ret = std::round(ret);
     }
 
     return ret;
@@ -331,17 +329,17 @@ class int_constraint : public range_constraint {
     double _min = std::max(min(), origin - zoneSize / 2.0);
     double _max = std::min(max(), origin + zoneSize / 2.0);
 
-    double val = boost::math::round(genrand(_min, _max));
+    double val = std::round(genrand(_min, _max));
 
     for (; val < _min || val > _max;
-         val = boost::math::round(genrand(_min, _max)))
+         val = std::round(genrand(_min, _max)))
       ;
 
     return val;
   }
 
   virtual double get_middle_point() {
-    return boost::math::round((max() - min()) / 2.0);
+    return std::round((max() - min()) / 2.0);
   }
 };
 
@@ -535,10 +533,6 @@ typedef std::vector<constraint_ptr> constraints_base;
  * @author adrian (12/1/2011)
  */
 class constraints : public constraints_base {
- private:
-  typedef boost::char_separator<char> separator;
-  typedef boost::tokenizer<separator> tokenizer;
-
  public:
   /**
    * Initializes a collection of constraints with default values.
@@ -556,90 +550,6 @@ class constraints : public constraints_base {
                          std::make_shared<real_constraint>(defMin, defMax)) {}
 
   /**
-   * Initializes a collection of constraints from string
-   * descsriptions. Currently used only for range based
-   * constraints.
-   *
-   * A constraint can be described as "type;min;max" where type
-   * can be real or integer and min and max are the range limits.
-   *
-   * @author adrian (12/1/2011)
-   *
-   * @param str a a collection (vector) of constraint description
-   *  		  strings, each string describing constraints for
-   *  		  one variable
-   * @param var_count the total number of variables (can be
-   *  			   different than the number of strings). If
-   *  			   there are more variables than strings, the
-   *  			   extra constraints are set to be real and use
-   *  			   the default min and max arguments for the
-   *  			   range
-   * @param def_min default min value in case the number of
-   *  			 variables is higher than the number of
-   *  			 constraints specified as strings.
-   * @param def_max default max value in case the number of
-   *  			 variables is higher than the number of
-   *  			 constraints specified as strings.
-   */
-  constraints(const std::vector<std::string>& str, size_t var_count,
-              double def_min, double def_max)
-      : constraints_base(
-            var_count, std::make_shared<real_constraint>(def_min, def_max)) {
-    for (std::vector<std::string>::size_type i = 0; i < str.size(); ++i) {
-      tokenizer tokens(str[i], separator(";,"));
-
-      std::string type;
-      double _min;
-      double _max;
-
-      size_t count(0);
-
-      for (tokenizer::const_iterator j = tokens.begin(); j != tokens.end();
-           ++j, ++count) {
-        const std::string token(boost::trim_copy(*j));
-
-        try {
-          switch (count) {
-            case 0:
-              type = token;
-              break;
-            case 1:
-              _min = boost::lexical_cast<double>(token.c_str());
-              break;
-            case 2:
-              _max = boost::lexical_cast<double>(token.c_str());
-              break;
-            default:
-              // too many fields
-              throw constraints_exception(
-                  (boost::format(
-                       "wrong variable format in \"%1%\" - too many fields") %
-                   str[i])
-                      .str());
-          }
-        } catch (const boost::bad_lexical_cast&) {
-          throw constraints_exception(
-              (boost::format("wrong floating point number format: %1%") % token)
-                  .str());
-        }
-      }
-
-      // too few fields
-      if (count < 3)
-        throw constraints_exception(
-            (boost::format(
-                 "wrong variable format in \"%1%\" - too few fields") %
-             str[i])
-                .str());
-
-      if (i < var_count)
-        constraints_base::at(i) = str_to_constraint(type, _min, _max);
-      else
-        constraints_base::push_back(str_to_constraint(type, _min, _max));
-    }
-  }
-
-  /**
    * returns a random value limited to the type and range of the
    * constraint
    *
@@ -650,12 +560,11 @@ class constraints : public constraints_base {
   double get_rand_value(size_t index) {
     if (index < constraints_base::size())
       return (*this)[index]->get_rand_value();
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint index: %1%, higher than max "
-                         "number of constraints: %2%") %
-           index % constraints_base::size())
-              .str());
+    else {
+      std::stringstream sout;
+      sout << "invalid constraint index: " << index << ", higher than max number of constraints: " << constraints_base::size();
+      throw constraints_exception(sout.str());
+    }
   }
 
   /**
@@ -673,12 +582,11 @@ class constraints : public constraints_base {
   double get_rand_value(size_t index, double value, double origin) {
     if (index < constraints_base::size())
       return (*this)[index]->get_rand_value(value, origin);
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint index: %1%, higher than max "
-                         "number of constraints: %2%") %
-           index % constraints_base::size())
-              .str());
+    else {
+      std::stringstream sout;
+      sout << "invalid constraint index: " << index << ", higher than max number of constraints: " << constraints_base::size();
+      throw constraints_exception(sout.str());
+    }
   }
 
   /**
@@ -738,19 +646,6 @@ class constraints : public constraints_base {
       (*r)[n] = (*this)[n]->get_rand_value();
 
     return r;
-  }
-
- private:
-  constraint_ptr str_to_constraint(const std::string& type, double min,
-                                   double max) {
-    if (boost::to_lower_copy(type) == "real")
-      return std::make_shared<real_constraint>(min, max);
-    else if (boost::to_lower_copy(type) == "int" ||
-             boost::to_lower_copy(type) == "integer")
-      return std::make_shared<int_constraint>(min, max);
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint type \"%1%\"") % type).str());
   }
 };
 
