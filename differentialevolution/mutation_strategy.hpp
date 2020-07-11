@@ -10,11 +10,10 @@
 
 #pragma once
 
+#include <boost/tuple/tuple.hpp>
 #include "population.hpp"
 
 #define URN_DEPTH 5
-
-#include <boost/tuple/tuple.hpp>
 
 namespace amichel {
 namespace de {
@@ -23,8 +22,6 @@ namespace de {
  * Parameters used by mutation strategies
  * weight factor, crossover factor and dither factor which is
  * calculated from the previous two
- *
- * @author adrian (12/1/2011)
  */
 class mutation_strategy_arguments {
  private:
@@ -40,8 +37,6 @@ class mutation_strategy_arguments {
    * by the calling code, this object holds a dither factor, which
    * is calculated upon construction, and is used by some mutation
    * strtegies.
-   *
-   * @author adrian (12/4/2011)
    *
    * @param weight weight factor which is a double between 0-2 as
    *  			 defined by the differential evolution algorithm
@@ -60,23 +55,17 @@ class mutation_strategy_arguments {
   /**
    * returns the weight factor
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double weight() const { return m_weight; }
   /**
    * returns the crossover factor
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double crossover() const { return m_crossover; }
   /**
    * returns the dither factor
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -88,8 +77,6 @@ class mutation_strategy_arguments {
  *
  * A mutation strategy defines how varaibles values are adjusted
  * during the optimization process
- *
- * @author adrian (12/1/2011)
  */
 class mutation_strategy {
  private:
@@ -103,8 +90,6 @@ class mutation_strategy {
    *
    * The numbers must all be different, and also different from an
    * index supplied externally
-   *
-   * @author adrian (12/1/2011)
    */
   class Urn {
     size_t m_urn[URN_DEPTH];
@@ -112,8 +97,6 @@ class mutation_strategy {
    public:
     /**
      * Constructs an urn object
-     *
-     * @author adrian (12/4/2011)
      *
      * @param NP upper limit (exclusive) for the generated random
      *  		 numbers
@@ -139,10 +122,7 @@ class mutation_strategy {
     /**
      * returns one of the four generated random numbers
      *
-     * @author adrian (12/4/2011)
-     *
-     * @param index the index of the random number to return, can be
-     *  			between 0-3
+     * @param index the index of the random number to return, can be between 0-3
      *
      * @return size_t
      */
@@ -158,8 +138,6 @@ class mutation_strategy {
   /**
    * constructs a mutation strategy
    *
-   * @author adrian (12/4/2011)
-   *
    * @param varCount number of variables
    * @param args mutation strategy arguments
    */
@@ -174,8 +152,6 @@ class mutation_strategy {
   /**
    * performs the mutation
    *
-   * @author adrian (12/4/2011)
-   *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
@@ -189,40 +165,9 @@ class mutation_strategy {
   virtual mutation_info operator()(const population& pop, individual_ptr bestIt,
                                    size_t i) = 0;
 
-  /**
-   * returns the number of variables
-   *
-   * @author adrian (12/4/2011)
-   *
-   * @return size_t
-   */
   size_t varCount() const { return m_varCount; }
-
-  /**
-   * returns the weight factor
-   *
-   * @author adrian (12/4/2011)
-   *
-   * @return double
-   */
   double weight() const { return m_args.weight(); }
-
-  /**
-   * returns the crossover factor
-   *
-   * @author adrian (12/4/2011)
-   *
-   * @return double
-   */
   double crossover() const { return m_args.crossover(); }
-
-  /**
-   * returns the dither factor
-   *
-   * @author adrian (12/4/2011)
-   *
-   * @return double
-   */
   double dither() const { return m_args.dither(); }
 };
 
@@ -230,15 +175,11 @@ typedef boost::shared_ptr<mutation_strategy> mutation_strategy_ptr;
 
 /**
  * Mutation strategy #1
- *
- * @author adrian (12/1/2011)
  */
 class mutation_strategy_1 : public mutation_strategy {
  public:
   /**
    * constructs a mutation strategy # 1
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount number of variables
    * @param args mutation strategy arguments
@@ -248,8 +189,6 @@ class mutation_strategy_1 : public mutation_strategy {
 
   /**
    * performs the mutation
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation
@@ -288,17 +227,10 @@ class mutation_strategy_1 : public mutation_strategy {
   }
 };
 
-/**
- * mutation strategy # 2
- *
- * @author adrian (12/4/2011)
- */
 class mutation_strategy_2 : public mutation_strategy {
  public:
   /**
    * constructs a mutation strategy # 2
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount number of variables
    * @param args mutation strategy arguments
@@ -308,8 +240,6 @@ class mutation_strategy_2 : public mutation_strategy {
 
   /**
    * performs the mutation
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation
@@ -349,17 +279,10 @@ class mutation_strategy_2 : public mutation_strategy {
   }
 };
 
-/**
- * mutation strategy # 3
- *
- * @author adrian (12/4/2011)
- */
 class mutation_strategy_3 : public mutation_strategy {
  public:
   /**
    * constructs a mutation strategy # 3
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount number of variables
    * @param args mutation strategy arguments
@@ -369,8 +292,6 @@ class mutation_strategy_3 : public mutation_strategy {
 
   /**
    * performs the mutation
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation
@@ -411,17 +332,10 @@ class mutation_strategy_3 : public mutation_strategy {
   }
 };
 
-/**
- * mutation strategy # 4
- *
- * @author adrian (12/4/2011)
- */
 class mutation_strategy_4 : public mutation_strategy {
  public:
   /**
    * constructs a mutation strategy # 4
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount number of variables
    * @param args mutation strategy arguments
@@ -431,8 +345,6 @@ class mutation_strategy_4 : public mutation_strategy {
 
   /**
    * performs the mutation
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation
@@ -475,17 +387,10 @@ class mutation_strategy_4 : public mutation_strategy {
   }
 };
 
-/**
- * Mutation strategy # 5
- *
- * @author adrian (12/1/2011)
- */
 class mutation_strategy_5 : public mutation_strategy {
  public:
   /**
    * constructs a mutation strategy # 5
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount number of variables
    * @param args mutation strategy arguments
@@ -495,8 +400,6 @@ class mutation_strategy_5 : public mutation_strategy {
 
   /**
    * performs the mutation
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop a reference to the current population
    * @param bestIt the best individual of the previous generation

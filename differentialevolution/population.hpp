@@ -19,16 +19,12 @@ typedef std::vector<individual_ptr> population_base;
 
 /**
  * A collection of individuals.
- *
- * @author adrian (12/4/2011)
  */
 class population : public population_base {
  public:
   /**
    * constructs a population object containing uninitialized
    * individuals
-   *
-   * @author adrian (12/4/2011)
    *
    * @param popSize the population size (number of individuals)
    * @param varCount the number of variables for each individual
@@ -46,8 +42,6 @@ class population : public population_base {
    * within the limits imposed by the corresponding constraints,
    * then runs the objective function for each individual to
    * calculate the associated cost.
-   *
-   * @author adrian (12/4/2011)
    *
    * @param popSize the population size (number of individuals)
    * @param varCount the number of variables for each individual
@@ -67,8 +61,6 @@ class population : public population_base {
   /**
    * returns the best individual in a population
    *
-   * @author adrian (12/4/2011)
-   *
    * @return individual_ptr
    */
   individual_ptr best(bool minimize) const {
@@ -82,8 +74,6 @@ class population : public population_base {
 
   /**
    * returns the string representation of a population
-   *
-   * @author adrian (12/4/2011)
    *
    * @return std::string string representation of the population
    */

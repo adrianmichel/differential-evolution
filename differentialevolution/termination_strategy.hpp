@@ -23,18 +23,12 @@ namespace de {
  * been reached, or can implement more complex algorithms that
  * try to minimize the number of execution steps by
  * determinining when a reasonable best value has been reached.
- *
- * @author adrian (12/1/2011)
  */
 class termination_strategy {
  public:
   virtual ~termination_strategy() {}
 
   /**
-   *
-   *
-   * @author adrian (12/1/2011)
-   *
    * @param best The best individual so far
    * @param genCount generation number
    *
@@ -53,8 +47,6 @@ typedef boost::shared_ptr<termination_strategy> termination_strategy_ptr;
  * Basic implementation of a Termination Strategy: stop the
  * optimization process if a maximum number of generations has
  * been reached
- *
- * @author adrian (12/1/2011)
  */
 class max_gen_termination_strategy : public termination_strategy {
  private:
@@ -63,8 +55,6 @@ class max_gen_termination_strategy : public termination_strategy {
  public:
   /**
    * constructs a max_gen_termination_strategy object
-   *
-   * @author adrian (12/4/2011)
    *
    * @param maxGen maximum number of generations after which the
    *  			 optimization stops

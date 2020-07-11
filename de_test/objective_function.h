@@ -24,8 +24,6 @@
 
 /**
  * Abstract base class for concrete objective functions.
- *
- * @author adrian (12/1/2011)
  */
 class objective_function {
  private:
@@ -34,8 +32,6 @@ class objective_function {
  public:
   /**
    * constructs an objective_function object
-   *
-   * @author adrian (12/4/2011)
    *
    * @param name the objective function name
    */
@@ -58,8 +54,6 @@ class objective_function {
    * first two values of the args vector as the two variables. All
    * the other values in this vector can be ignored.
    *
-   * @author adrian (12/1/2011)
-   *
    * @param args the vector of arguments. The vector is usually
    *  		   much larger than the number of variables used by
    *  		   the objective function, so the OF will take only
@@ -75,8 +69,6 @@ class objective_function {
 
   /**
    * An objective function has a name
-   *
-   * @author adrian (12/1/2011)
    *
    * @return const std::string&
    */

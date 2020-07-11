@@ -32,8 +32,6 @@ namespace de {
 /**
  * Exception thrown in case of an error during an optimization
  * session
- *
- * @author adrian (12/1/2011)
  */
 class differential_evolution_exception {};
 
@@ -42,8 +40,6 @@ class differential_evolution_exception {};
  *
  * Runs an optimization session based on various input
  * parameters or strategies
- *
- * @author adrian (12/1/2011)
  */
 template <typename T>
 class differential_evolution {
@@ -67,8 +63,6 @@ class differential_evolution {
  public:
   /**
    * constructs a differential_evolution object
-   *
-   * @author adrian (12/4/2011)
    *
    * @param varCount total number of variables. It includes the
    *  			   variables required by the objective function
@@ -137,8 +131,6 @@ class differential_evolution {
    * although the processing is done in parallel, this function is
    * synchronous and won't return until the optimization is
    * complete, or an error triggered an exception
-   *
-   * @author adrian (12/4/2011)
    */
   void run() {
     try {
@@ -192,8 +184,6 @@ class differential_evolution {
   /**
    * returns the best individual resulted from the optimization
    * process
-   *
-   * @author adrian (12/4/2011)
    *
    * @return individual_ptr
    */

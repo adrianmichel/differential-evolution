@@ -30,8 +30,6 @@
 
 /**
  * Encapsulation of the function to optimize
- *
- * @author adrian (12/8/2011)
  */
 class FunctionToOptimize {
   static objective_function_ptr _functions[];
@@ -50,8 +48,6 @@ typedef boost::shared_ptr<FunctionToOptimize> FunctionToOptimizePtr;
 
 /**
  * Command line class
- *
- * @author adrian (12/8/2011)
  */
 class CmdLine {
  private:
@@ -101,8 +97,6 @@ class CmdLine {
 
 /**
  * Command line exception
- *
- * @author adrian (12/8/2011)
  */
 class CmdLineException : public amichel::de::exception {
  public:

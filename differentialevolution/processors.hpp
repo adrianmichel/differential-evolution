@@ -29,8 +29,6 @@ namespace de {
  * Since its methods are called from multiple threads,
  * concrete classes must use thread synchronization objects to
  * avoid data corruption
- *
- * @author adrian (12/1/2011)
  */
 class processor_listener {
  public:
@@ -39,16 +37,12 @@ class processor_listener {
    * called at the start of a processor operator() which runs the
    * objective function
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    */
   virtual void start(size_t index) = 0;
   /**
    * called before running the objective function with variables
    * from the current individual
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the processor index
    * @param individual current individual that the objective
@@ -61,8 +55,6 @@ class processor_listener {
    * also has the cost set to the result of the objective function
    * run
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    * @param individual current individual that the objective
    *  				 function ran on. Also contains the cost
@@ -74,16 +66,12 @@ class processor_listener {
    *
    * this is called even if an exception is thrown
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    */
   virtual void end(size_t index) = 0;
   /**
    * called if an exception is thrown during the run of the
    * objective function, and indicates an error
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the processor index
    * @param message a message describing the error
@@ -97,8 +85,6 @@ class processor_listener {
  *
  * Doesn't need synchronization, since no data is read or
  * modified
- *
- * @author adrian (12/4/2011)
  */
 class null_processor_listener : public processor_listener {
  public:
@@ -106,16 +92,12 @@ class null_processor_listener : public processor_listener {
    * called at the start of a processor operator() which runs the
    * objective function
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    */
   virtual void start(size_t index) {}
   /**
    * called before running the objective function with variables
    * from the current individual
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the processor index
    * @param individual current individual that the objective
@@ -128,8 +110,6 @@ class null_processor_listener : public processor_listener {
    * also has the cost set to the result of the objective function
    * run
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    * @param individual current individual that the objective
    *  				 function ran on. Also contains the cost
@@ -141,16 +121,12 @@ class null_processor_listener : public processor_listener {
    *
    * this is called even if an exception is thrown
    *
-   * @author adrian (12/4/2011)
-   *
    * @param index the processor index
    */
   virtual void end(size_t index) {}
   /**
    * called if an exception is thrown during the run of the
    * objective function, and indicates an error
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the processor index
    * @param message an message describing the error
@@ -166,15 +142,11 @@ typedef boost::shared_ptr<processor_listener> processor_listener_ptr;
 /**
  * Exception thrown in case of an error in the objective
  * function.
- *
- * @author adrian (12/1/2011)
  */
 class objective_function_exception : public exception {
  public:
   /**
    * constructs an objectivr_function_exception object
-   *
-   * @author adrian (12/11/2011)
    *
    * @param message the message describing the error that caused
    *  			  the exception
@@ -198,8 +170,6 @@ class objective_function_exception : public exception {
  * that the right behavior is applied.
  *
  * The template argument T is the type of the objective function
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class objective_function_factory {
@@ -211,16 +181,12 @@ class objective_function_factory {
 
   /**
    * virtual distructor
-   *
-   * @author adrian (12/15/2011)
    */
   virtual ~objective_function_factory() {}
 
   /**
    * Method implemented in derived classes that will create new
    * instances of the objective function
-   *
-   * @author adrian (12/15/2011)
    *
    * @return T_ptr a smart pointer to the objective function
    */
@@ -230,8 +196,6 @@ class objective_function_factory {
 /**
  * Base processor traits for the case where the objecive
  * function is passed by reference and copied
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits {
@@ -246,8 +210,6 @@ class processor_traits {
 /**
  * specialized processor traits for the case where the objective
  * function is passed as a ponter
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits<T*> {
@@ -262,8 +224,6 @@ class processor_traits<T*> {
 /**
  * Specialized processor traits for the case where the objective
  * function is passed as a shared pointer
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits<boost::shared_ptr<T> > {
@@ -279,8 +239,6 @@ class processor_traits<boost::shared_ptr<T> > {
  * Specialized processor traits for the case wehere the
  * processor receives a pointer to an objective function
  * factory.
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits<objective_function_factory<T>*> {
@@ -297,8 +255,6 @@ class processor_traits<objective_function_factory<T>*> {
  * Specialized processor traits for the case wehere the
  * processor receives a shared pointer to an objective function
  * factory.
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits<boost::shared_ptr<objective_function_factory<T> > > {
@@ -317,8 +273,6 @@ class processor_traits<boost::shared_ptr<objective_function_factory<T> > > {
  * Specialized processor traits for the case wehere the
  * processor receives a reference to an objective
  * function factory.
- *
- * @author adrian (12/15/2011)
  */
 template <typename T>
 class processor_traits<objective_function_factory<T>&> {
@@ -339,8 +293,6 @@ class processor_traits<objective_function_factory<T>&> {
  *
  * The processor class uses the type of the objective function
  * defined in the corresponding processor_traits
- *
- * @author adrian (12/1/2011)
  */
 template <typename T>
 class processor : boost::noncopyable {
@@ -355,8 +307,6 @@ class processor : boost::noncopyable {
  public:
   /**
    * constructs a processor object
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the processor index
    * @param of objective function, or objective function factory.
@@ -379,8 +329,6 @@ class processor : boost::noncopyable {
   /**
    * runs the objective function on the object at the top of the
    * queue, if any
-   *
-   * @author adrian (12/4/2011)
    */
   void operator()() {
     m_listener->start(m_index);
@@ -409,8 +357,6 @@ class processor : boost::noncopyable {
    * indicates whether the run ended succesfully when the thread
    * exits
    *
-   * @author adrian (12/4/2011)
-   *
    * @return bool
    */
   bool success() const { return m_result; }
@@ -418,15 +364,11 @@ class processor : boost::noncopyable {
 
 /**
  * Exception thrown in case of a processors error
- *
- * @author adrian (12/1/2011)
  */
 class processors_exception : exception {
  public:
   /**
    * constructor taking a message string as argument
-   *
-   * @author adrian (12/15/2011)
    *
    * @param message
    */
@@ -443,8 +385,6 @@ class processors_exception : exception {
  * Takes the type of the objective function or objective
  * function factory as argument (reference, pointer or
  * shared_ptr)
- *
- * @author adrian (12/1/2011)
  */
 template <typename T>
 class processors {
@@ -464,8 +404,6 @@ class processors {
    * constructs a processors object, which in turn constructs the
    * "count" processors, using the objective_function provided
    *
-   * @author adrian (12/4/2011)
-   *
    * @param count number of processors to create
    * @param of objective function or objective function factory
    * @param listener a listener passed to each created processor
@@ -484,16 +422,12 @@ class processors {
   /**
    * pushes on individual to the bottom of the processing queue
    *
-   * @author adrian (12/4/2011)
-   *
    * @param ind
    */
   void push(individual_ptr ind) { m_indQueue.push(ind); }
   /**
    * starts all processors threads asynchronously (it will not
    * wait for them to finish)
-   *
-   * @author adrian (12/4/2011)
    */
   void start() {
     // create a new group every time, don't bother removing all individual
@@ -512,8 +446,6 @@ class processors {
    * waits for all processors to finish before returning
    *
    * used for synchronous processing
-   *
-   * @author adrian (12/4/2011)
    */
   void wait() {
     m_threads->join_all();
@@ -526,8 +458,6 @@ class processors {
 
   /**
    * indicates whether all processors ended succesfully
-   *
-   * @author adrian (12/4/2011)
    *
    * @return bool true if success, false if an error occured
    */
@@ -544,8 +474,6 @@ class processors {
   /**
    * pushes all individuals in a population into the processing
    * queue
-   *
-   * @author adrian (12/15/2011)
    *
    * @param population
    */

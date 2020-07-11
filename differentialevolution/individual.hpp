@@ -23,14 +23,12 @@ class individual;
 typedef boost::shared_ptr<individual> individual_ptr;
 
 /**
- * An individual of a Differrential Evolution population
+ * An individual of a Differential Evolution population
  *
  * An individual has a set of variables and a cost associated
  * with these variables
  *
  * An individual is thread safe
- *
- * @author adrian (12/1/2011)
  */
 class individual {
  private:
@@ -42,8 +40,6 @@ class individual {
   /**
    * constructs an individual
    *
-   * @author adrian (12/4/2011)
-   *
    * @param varCount the number of variables for each individual
    */
   individual(size_t varCount)
@@ -51,8 +47,6 @@ class individual {
 
   /**
    * constructs an individual
-   *
-   * @author adrian (12/4/2011)
    *
    * @param vars a vector of variables that will be copied into
    *  		   the internal vector of variables
@@ -63,8 +57,6 @@ class individual {
   /**
    * Initialized the internal vector of variables with random
    * values within the constraints
-   *
-   * @author adrian (12/4/2011)
    *
    * @param constraints
    */
@@ -77,20 +69,11 @@ class individual {
       (*m_vars)[j] = constraints->get_rand_value(j);
   }
 
-  /**
-   * returns the cost
-   *
-   * @author adrian (12/4/2011)
-   *
-   * @return double
-   */
   double cost() const { return m_cost; }
 
   /**
    * Sets the variables to new random values within the
    * constraints, using origin and old value
-   *
-   * @author adrian (12/4/2011)
    *
    * @param constraints
    * @param origin
@@ -109,8 +92,6 @@ class individual {
   /**
    * returns the internal variable vector
    *
-   * @author adrian (12/4/2011)
-   *
    * @return de::DVectorPtr
    */
   de::DVectorPtr vars() const { return m_vars; }
@@ -119,10 +100,7 @@ class individual {
    * returns a non constant reference to a variable value
    * based on an index, which can be used as an lvalue.
    *
-   * @author adrian (12/4/2011)
-   *
-   * @param index the index of the variable whose reference to
-   *  			return
+   * @param index the index of the variable whose reference to return
    *
    * @return de::Double&
    */
@@ -131,8 +109,6 @@ class individual {
   /**
    * returns a constant reference to a variable value based
    * on an index, which can be used as an lvalue.
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the index of the variable whose reference to return
    *
@@ -143,8 +119,6 @@ class individual {
   /**
    * Sets the cost
    *
-   * @author adrian (12/4/2011)
-   *
    * @param cost
    */
   void setCost(double cost) { m_cost = cost; }
@@ -153,8 +127,6 @@ class individual {
    * compares the current individual with another individual based
    * on cost. Returns true if the current cost is lower or equal
    * to the cost of the other individual
-   *
-   * @author adrian (12/4/2011)
    *
    * @param ind the individual to compare with
    *
@@ -170,8 +142,6 @@ class individual {
    * on cost. Returns true if the current cost is strictly lower
    * than the cost of the other individual
    *
-   * @author adrian (12/4/2011)
-   *
    * @param ind the individual to compare with
    *
    * @return bool
@@ -186,8 +156,6 @@ class individual {
    * on cost. Returns true if the current cost is better or equal
    * than the cost of the other individual, where better is either
    * lower or higher depending on the minimize flag
-   *
-   * @author adrian (12/4/2011)
    *
    * @param ind the individual to compare with
    * @param minimize <= if true, >= if false
@@ -205,8 +173,6 @@ class individual {
    * than the cost of the other individual, where better is either
    * lower or higher depending on the minimize flag
    *
-   * @author adrian (12/4/2011)
-   *
    * @param ind the individual to compare with
    * @param minimize < if true, > if false
    *
@@ -220,8 +186,6 @@ class individual {
   /**
    * returns the size of variables vector
    *
-   * @author adrian (12/4/2011)
-   *
    * @return size_t
    */
   size_t size() const { return m_vars->size(); }
@@ -229,8 +193,6 @@ class individual {
   /**
    * returns a string representation of the internals of an
    * individual (cost and list of variables)
-   *
-   * @author adrian (12/4/2011)
    *
    * @return std::string
    */
@@ -254,8 +216,6 @@ typedef std::queue<individual_ptr> individual_queue_base;
  *
  * Used to queue Individuals containing the arguments to be
  * passed by different processors to the objective function
- *
- * @author adrian (12/1/2011)
  */
 class individual_queue : public individual_queue_base {
  private:
@@ -266,8 +226,6 @@ class individual_queue : public individual_queue_base {
    * adds a new individual at the bottom of the queue
    *
    * is thread safe
-   *
-   * @author adrian (12/4/2011)
    *
    * @param ind the individual to insert into the queue
    */
@@ -282,8 +240,6 @@ class individual_queue : public individual_queue_base {
    * returns it
    *
    * is thread safe
-   *
-   * @author adrian (12/4/2011)
    *
    * @return individual_ptr the individual at the top of the queue
    *  	   or null individual if the queue is empty

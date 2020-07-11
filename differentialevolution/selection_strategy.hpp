@@ -21,8 +21,6 @@ namespace de {
  *
  * A selection strategy is used by Differential Evolution to
  * determine what is the best individual
- *
- * @author adrian (12/1/2011)
  */
 class selection_strategy {
  public:
@@ -30,8 +28,6 @@ class selection_strategy {
 
   /**
    * applies the selection strategy
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop1 old population
    * @param pop2 new population
@@ -54,15 +50,11 @@ typedef boost::shared_ptr<selection_strategy> selection_strategy_ptr;
  * generations based on the cost for each individual, and on the
  * desired outcome - minimization or maximization of the
  * objective function
- *
- * @author adrian (12/1/2011)
  */
 class best_parent_child_selection_strategy : public selection_strategy {
  public:
   /**
    * applies the selection strategy
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop1 old population
    * @param pop2 new population
@@ -115,15 +107,11 @@ class best_parent_child_selection_strategy : public selection_strategy {
  * Selection strategy which compares individuals in two
  * generations corresponding to the same index, and uses the
  * best one for the next generation
- *
- * @author adrian (12/1/2011)
  */
 class tournament_selection_strategy : public selection_strategy {
  public:
   /**
    * applies the selection strategy
-   *
-   * @author adrian (12/4/2011)
    *
    * @param pop1 old population
    * @param pop2 new population

@@ -25,15 +25,11 @@ namespace de {
 
 /**
  * Exception thrown in case of a constraint error
- *
- * @author adrian (12/1/2011)
  */
 class constraints_exception : public exception {
  public:
   /**
    * constructor that takes the error message as argument
-   *
-   * @author adrian (12/4/2011)
    *
    * @param message
    */
@@ -46,8 +42,6 @@ class constraints_exception : public exception {
  *
  * A constraint class describes certain characteristics and
  * limits of the input variables fed to the objective function.
- *
- * @author adrian (12/1/2011)
  */
 class constraint {
  public:
@@ -57,8 +51,6 @@ class constraint {
    * returns a random value limited to the type and range of the
    * constraint
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   virtual double get_rand_value() = 0;
@@ -67,8 +59,6 @@ class constraint {
    * returns a random value limited to the type and range of the
    * constraint based on a previous value and an origin (see
    * specific implementation in derived classes)
-   *
-   * @author adrian (12/4/2011)
    *
    * @param value
    * @param origin
@@ -80,16 +70,12 @@ class constraint {
   /**
    * returns the min limit of the range
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   virtual double min() const = 0;
 
   /**
    * returns the max limit of the range
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -100,8 +86,6 @@ class constraint {
    * but further limited to a range defined by its origin and the
    * width of the zone around this origin in pct of the total
    * width
-   *
-   * @author adrian (12/13/2011)
    *
    * @param origin the origin (center) of the zone further
    *  			 limiting the constraint
@@ -117,8 +101,6 @@ class constraint {
    * Gets the point midway between min and max - will only work
    * for range constraints
    *
-   * @author adrian (12/16/2011)
-   *
    * @return double
    */
   virtual double get_middle_point() = 0;
@@ -132,8 +114,6 @@ typedef boost::shared_ptr<constraint> constraint_ptr;
 /**
  * Base class for constraints that are range based. Each such
  * constraint has a min and a max value
- *
- * @author adrian (12/1/2011)
  */
 class range_constraint : public constraint {
  private:
@@ -143,8 +123,6 @@ class range_constraint : public constraint {
  public:
   /**
    * constructor that takes the min and max limits of the range
-   *
-   * @author adrian (12/4/2011)
    *
    * @param min
    * @param max
@@ -156,16 +134,12 @@ class range_constraint : public constraint {
   /**
    * returns the min limit of the range
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double min() const { return m_min; }
 
   /**
    * returns the max limit of the range
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -175,16 +149,12 @@ class range_constraint : public constraint {
 /**
  * A real constraint. Specifies that variables can have any
  * double value, whitin the specified limits.
- *
- * @author adrian (12/1/2011)
  */
 class real_constraint : public range_constraint {
  public:
   /**
    * constructor that takes the min and max limit of the real
    * constraint
-   *
-   * @author adrian (12/4/2011)
    *
    * @param min
    * @param max
@@ -197,8 +167,6 @@ class real_constraint : public range_constraint {
    * returns a random value limited to the type and range of the
    * constraint
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double get_rand_value() {
@@ -208,8 +176,6 @@ class real_constraint : public range_constraint {
   /**
    * returns a random value limited to the type and range of the
    * constraint based on a previous value and an origin
-   *
-   * @author adrian (12/4/2011)
    *
    * @param value
    * @param origin
@@ -256,16 +222,12 @@ class real_constraint : public range_constraint {
 /**
  * An integer constraint. Specifies that variables can have any
  * integer values within the specified limits.
- *
- * @author adrian (12/1/2011)
  */
 class int_constraint : public range_constraint {
  public:
   /**
    * constructor that takes the min and max limit of the integer
    * constraint
-   *
-   * @author adrian (12/4/2011)
    *
    * @param min
    * @param max
@@ -278,8 +240,6 @@ class int_constraint : public range_constraint {
    * returns a random value limited to the type and range of the
    * constraint
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double get_rand_value() {
@@ -289,8 +249,6 @@ class int_constraint : public range_constraint {
   /**
    * returns a random value limited to the type and range of the
    * constraint based on a previous value and an origin
-   *
-   * @author adrian (12/4/2011)
    *
    * @param value
    * @param origin
@@ -349,8 +307,6 @@ class int_constraint : public range_constraint {
  * values from a predefined set. Doesn't require min or max.
  *
  * Note that duplicate values will be removed
- *
- * @author adrian (12/1/2011)
  */
 class set_constraint : public constraint {
  private:
@@ -389,8 +345,6 @@ class set_constraint : public constraint {
    * removes duplicates to ensure a uniform distribution for
    * randomization
    *
-   * @author adrian (12/10/2011)
-   *
    * @param values
    */
   set_constraint(const de::DVector& values) {
@@ -403,8 +357,6 @@ class set_constraint : public constraint {
    * adds an individual value to the "set", won't create duplicate
    * values.
    *
-   * @author adrian (12/10/2011)
-   *
    * @param value
    */
   void add_value(de::Double value) {
@@ -414,8 +366,6 @@ class set_constraint : public constraint {
   /**
    * returns a value randomly chosen from the set of available
    * values
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -429,8 +379,6 @@ class set_constraint : public constraint {
    * returns a value randomly chosen from the set of available
    * values
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   virtual double get_rand_value(double value, double origin) {
@@ -440,16 +388,12 @@ class set_constraint : public constraint {
   /**
    * returns the min limit of the range
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double min() const { return m_unique.min(); }
 
   /**
    * returns the max limit of the range
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -469,15 +413,11 @@ class set_constraint : public constraint {
 /**
  * A boolean constraint. Specifies that variables can take a
  * boolean value - true or false.
- *
- * @author adrian (12/1/2011)
  */
 class boolean_constraint : public constraint {
  public:
   /**
    * returns a random boolean value
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -485,8 +425,6 @@ class boolean_constraint : public constraint {
 
   /**
    * returns a random boolean value
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -497,16 +435,12 @@ class boolean_constraint : public constraint {
   /**
    * returns the min limit of the range
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double min() const { return 0; }
 
   /**
    * returns the max limit of the range
-   *
-   * @author adrian (12/4/2011)
    *
    * @return double
    */
@@ -530,8 +464,6 @@ typedef std::vector<constraint_ptr> constraints_base;
  *
  * Is used to define the constraints for all variables used
  * during an optimization session.
- *
- * @author adrian (12/1/2011)
  */
 class constraints : public constraints_base {
  private:
@@ -543,8 +475,6 @@ class constraints : public constraints_base {
    * Initializes a collection of constraints with default values.
    * All constraints are of type real and have the same default
    * min and max.
-   *
-   * @author adrian (12/1/2011)
    *
    * @param varCount number of constraints
    * @param defMin default min limit
@@ -561,8 +491,6 @@ class constraints : public constraints_base {
    *
    * A constraint can be described as "type;min;max" where type
    * can be real or integer and min and max are the range limits.
-   *
-   * @author adrian (12/1/2011)
    *
    * @param str a a collection (vector) of constraint description
    *  		  strings, each string describing constraints for
@@ -642,8 +570,6 @@ class constraints : public constraints_base {
    * returns a random value limited to the type and range of the
    * constraint
    *
-   * @author adrian (12/4/2011)
-   *
    * @return double
    */
   double get_rand_value(size_t index) {
@@ -660,8 +586,6 @@ class constraints : public constraints_base {
   /**
    * returns a random value limited to the type and range of the
    * constraint based on a previous value and an origin
-   *
-   * @author adrian (12/4/2011)
    *
    * @param index the constraint index
    * @param value previous value
@@ -684,8 +608,6 @@ class constraints : public constraints_base {
    * Generates a set of random values within a "hypercube" region
    * defined by an origin and an area expressed as a percentage of
    * the entire range
-   *
-   * @author adrian (12/13/2011)
    *
    * @param origin the origin coordinates of the region
    * @param sidePct the side of the hypercube in pct of the entire
@@ -725,8 +647,6 @@ class constraints : public constraints_base {
   /**
    * Get a set of random values within the limits set by the
    * constraints
-   *
-   * @author adrian (12/13/2011)
    *
    * @return DVectorPtr
    */

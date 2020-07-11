@@ -20,8 +20,6 @@ using namespace amichel::de;
 /**
  * Basic Differential Evolution listener - displays the
  * generation cout and the best cost.
- *
- * @author adrian (12/8/2011)
  */
 class DETestListener : public amichel::de::listener {
  public:
@@ -54,8 +52,6 @@ class DETestListener : public amichel::de::listener {
  *
  * It shows however how to setup a thread safe listener, by
  * using synchronization objects.
- *
- * @author adrian (12/8/2011)
  */
 class DETestProcessorListener : public processor_listener {
 	amichel::de::mutex m_mx;
@@ -79,8 +75,6 @@ class DETestProcessorListener : public processor_listener {
 /**
  * Runs the Differential Evolution optimization process on
  * function and with the parameters selected on the command line
- *
- * @author adrian (12/8/2011)
  *
  * @param cmdLine
  */

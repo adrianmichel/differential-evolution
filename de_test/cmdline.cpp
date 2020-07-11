@@ -138,8 +138,6 @@ void CmdLine::showUsage() { std::cout << getUsage(); }
 /**
  * Process the command line
  *
- * @author adrian (12/8/2011)
- *
  * @param argc
  * @param argv
  *
