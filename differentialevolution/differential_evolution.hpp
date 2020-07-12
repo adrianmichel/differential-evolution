@@ -14,7 +14,7 @@
 #include <boost/make_shared.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "individual.hpp"
 #include "listener.hpp"
@@ -93,8 +93,8 @@ class differential_evolution {
 
       : m_varCount(varCount),
         m_popSize(popSize),
-        m_pop1(boost::make_shared<population>(popSize, varCount, constraints)),
-        m_pop2(boost::make_shared<population>(popSize, varCount)),
+        m_pop1(std::make_shared<population>(popSize, varCount, constraints)),
+        m_pop2(std::make_shared<population>(popSize, varCount)),
         m_bestInd(m_pop1->best(minimize)),
         m_constraints(constraints),
         m_processors(processors),

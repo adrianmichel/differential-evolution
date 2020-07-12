@@ -41,7 +41,7 @@ using DVector = std::vector<Double>;
 /**
  * shared pointer to a DVector
  */
-using DVectorPtr = boost::shared_ptr<DVector>;
+using DVectorPtr = std::shared_ptr<DVector>;
 
 /**
  * de exception conforms to the C++ standard (MS implementation

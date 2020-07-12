@@ -88,13 +88,13 @@ class population : public population_base {
  private:
   void init(size_t popSize, size_t varCount) {
     for (population_base::size_type i = 0; i < size(); ++i)
-      operator[](i) = boost::make_shared<individual>(varCount);
+      operator[](i) = std::make_shared<individual>(varCount);
   }
 
  public:
 };
 
-using population_ptr = boost::shared_ptr<population>;
+using population_ptr = std::shared_ptr<population>;
 
 }  // namespace de
 }  // namespace amichel

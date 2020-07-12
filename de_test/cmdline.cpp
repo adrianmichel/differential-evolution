@@ -34,7 +34,7 @@
 
 // useful types
 using StrVector = std::vector<std::string>;
-using StrVectorPtr = boost::shared_ptr<StrVector>;
+using StrVectorPtr = std::shared_ptr<StrVector>;
 using Separator = boost::char_separator<char>;
 using Tokenizer = boost::tokenizer<Separator>;
 
@@ -44,7 +44,7 @@ using Tokenizer = boost::tokenizer<Separator>;
   assert(vm.count(name##_LONG) > 0); \
   var = vm[name##_LONG].as<type>();
 #define MAKE_MUTATION_STRATEGY(n)            \
-  boost::make_shared<mutation_strategy_##n>( \
+  std::make_shared<mutation_strategy_##n>( \
       argumentsCount(), mutation_strategy_arguments(weight(), crossover()))
 
 // namespaces used in this file
@@ -261,22 +261,22 @@ bool CmdLine::process(int argc, char* argv[]) {
                 .str());
 
       assert(vm.count(CONSTRAINTS_LONG) > 0);
-      _constraints = boost::make_shared<amichel::de::constraints>(
+      _constraints = std::make_shared<amichel::de::constraints>(
           vm[CONSTRAINTS_LONG].as<std::vector<std::string> >(), _argumentsCount,
           argumentsDefConstraintMin, argumentsDefConstraintMax);
 
       assert(vm.count(FUNCTION_TO_OPTIMIZE_LONG) > 0);
-      _functionToOptimize = boost::make_shared<FunctionToOptimize>(
+      _functionToOptimize = std::make_shared<FunctionToOptimize>(
           vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>());
 
       switch (selectionStrategyIndex) {
         case 1:
           _selectionStrategy =
-              boost::make_shared<best_parent_child_selection_strategy>();
+              std::make_shared<best_parent_child_selection_strategy>();
           break;
         case 2:
           _selectionStrategy =
-              boost::make_shared<tournament_selection_strategy>();
+              std::make_shared<tournament_selection_strategy>();
           break;
         default:
           throw CmdLineException(
@@ -351,13 +351,13 @@ void CmdLine::notice(std::ostream& os) {
 }
 
 objective_function_ptr FunctionToOptimize::_functions[] = {
-    boost::make_shared<x_sqr_max_function>(),
-    boost::make_shared<x_sqr_min_function>(),
-    boost::make_shared<AnotherSimpleFunction>(),
-    boost::make_shared<SphereFunction>(),
-    boost::make_shared<AckleyFunction>(),
-    boost::make_shared<SecondDeJongFunction>(),
-    boost::make_shared<SixHumpCamelBackFunction>()};
+    std::make_shared<x_sqr_max_function>(),
+    std::make_shared<x_sqr_min_function>(),
+    std::make_shared<AnotherSimpleFunction>(),
+    std::make_shared<SphereFunction>(),
+    std::make_shared<AckleyFunction>(),
+    std::make_shared<SecondDeJongFunction>(),
+    std::make_shared<SixHumpCamelBackFunction>()};
 
 FunctionToOptimize::FunctionToOptimize(size_t index) : _index(--index) {}
 

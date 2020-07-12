@@ -88,21 +88,21 @@ void testFunctions(const CmdLine& cmdLine) {
   assert(of);
 
   // instantiate a DE listener
-  listener_ptr listener(boost::make_shared<DETestListener>());
+  listener_ptr listener(std::make_shared<DETestListener>());
 
   // instantiate a Processors listener
   processor_listener_ptr processorListener(
-      boost::make_shared<DETestProcessorListener>());
+      std::make_shared<DETestProcessorListener>());
 
   // instantiate the Processors, using the number of processors defined on the
   // command line, and the processors listener
   processors<objective_function_ptr>::processors_ptr processors(
-      boost::make_shared<processors<objective_function_ptr> >(
+      std::make_shared<processors<objective_function_ptr> >(
           cmdLine.processorsCount(), of, processorListener));
 
   // instantiate a basic termination strategy (just count the # of generations)
   termination_strategy_ptr terminationStrategy(
-      boost::make_shared<max_gen_termination_strategy>(
+      std::make_shared<max_gen_termination_strategy>(
           cmdLine.maxGenerations()));
 
   // instantiate the selection and mutation strategies as selected on the

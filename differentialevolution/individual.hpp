@@ -20,7 +20,7 @@ namespace amichel {
 namespace de {
 
 class individual;
-using individual_ptr = boost::shared_ptr<individual>;
+using individual_ptr = std::shared_ptr<individual>;
 
 /**
  * An individual of a Differential Evolution population
@@ -43,7 +43,7 @@ class individual {
    * @param varCount the number of variables for each individual
    */
   individual(size_t varCount)
-      : m_vars(boost::make_shared<de::DVector>(varCount)) {}
+      : m_vars(std::make_shared<de::DVector>(varCount)) {}
 
   /**
    * constructs an individual
@@ -52,7 +52,7 @@ class individual {
    *  		   the internal vector of variables
    */
   individual(const de::DVector& vars)
-      : m_vars(boost::make_shared<de::DVector>(vars)) {}
+      : m_vars(std::make_shared<de::DVector>(vars)) {}
 
   /**
    * Initialized the internal vector of variables with random
