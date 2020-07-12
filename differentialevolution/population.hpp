@@ -15,7 +15,7 @@
 namespace amichel {
 namespace de {
 
-typedef std::vector<individual_ptr> population_base;
+using population_base = std::vector<individual_ptr>;
 
 /**
  * A collection of individuals.
@@ -94,7 +94,7 @@ class population : public population_base {
  public:
 };
 
-typedef boost::shared_ptr<population> population_ptr;
+using population_ptr = boost::shared_ptr<population>;
 
 }  // namespace de
 }  // namespace amichel

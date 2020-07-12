@@ -43,7 +43,7 @@ class selection_strategy {
 /**
  * A smart pointer to a selection strategy
  */
-typedef boost::shared_ptr<selection_strategy> selection_strategy_ptr;
+using selection_strategy_ptr = boost::shared_ptr<selection_strategy>;
 
 /**
  * Selection strategy that sorts all individuals across two

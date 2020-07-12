@@ -36,12 +36,12 @@ class Double {
   operator double() const { return m_value; }
 };
 
-typedef std::vector<Double> DVector;
+using DVector = std::vector<Double>;
 
 /**
  * shared pointer to a DVector
  */
-typedef boost::shared_ptr<DVector> DVectorPtr;
+using DVectorPtr = boost::shared_ptr<DVector>;
 
 /**
  * de exception conforms to the C++ standard (MS implementation

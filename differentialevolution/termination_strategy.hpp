@@ -41,7 +41,7 @@ class termination_strategy {
 /**
  * A smart pointer to a TerminationStrategy
  */
-typedef boost::shared_ptr<termination_strategy> termination_strategy_ptr;
+using termination_strategy_ptr = boost::shared_ptr<termination_strategy>;
 
 /**
  * Basic implementation of a Termination Strategy: stop the

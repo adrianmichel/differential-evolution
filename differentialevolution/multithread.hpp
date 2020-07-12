@@ -14,8 +14,8 @@
 
 namespace amichel {
 namespace de {
-typedef boost::recursive_mutex mutex;
-typedef boost::lock_guard<boost::recursive_mutex> lock;
+using mutex = boost::recursive_mutex;
+using lock = boost::lock_guard<boost::recursive_mutex>;
 
 }  // namespace de
 }  // namespace amichel

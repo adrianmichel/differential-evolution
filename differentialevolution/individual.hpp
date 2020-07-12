@@ -20,7 +20,7 @@ namespace amichel {
 namespace de {
 
 class individual;
-typedef boost::shared_ptr<individual> individual_ptr;
+using individual_ptr = boost::shared_ptr<individual>;
 
 /**
  * An individual of a Differential Evolution population
@@ -209,7 +209,7 @@ class individual {
   }
 };
 
-typedef std::queue<individual_ptr> individual_queue_base;
+using individual_queue_base = std::queue<individual_ptr>;
 
 /**
  * A thread safe queue of individuals

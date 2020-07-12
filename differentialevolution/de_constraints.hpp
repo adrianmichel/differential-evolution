@@ -109,7 +109,7 @@ class constraint {
 /**
  * A smart pointer to a Constraint
  */
-typedef boost::shared_ptr<constraint> constraint_ptr;
+using constraint_ptr = boost::shared_ptr<constraint>;
 
 /**
  * Base class for constraints that are range based. Each such
@@ -457,7 +457,7 @@ class boolean_constraint : public constraint {
   }
 };
 
-typedef std::vector<constraint_ptr> constraints_base;
+using constraints_base = std::vector<constraint_ptr>;
 
 /**
  * A collection of constraints, implemented as a vector.
@@ -467,8 +467,8 @@ typedef std::vector<constraint_ptr> constraints_base;
  */
 class constraints : public constraints_base {
  private:
-  typedef boost::char_separator<char> separator;
-  typedef boost::tokenizer<separator> tokenizer;
+  using separator = boost::char_separator<char>;
+  using tokenizer = boost::tokenizer<separator>;
 
  public:
   /**
@@ -673,6 +673,6 @@ class constraints : public constraints_base {
   }
 };
 
-typedef boost::shared_ptr<constraints> constraints_ptr;
+using constraints_ptr = boost::shared_ptr<constraints>;
 }  // namespace de
 }  // namespace amichel

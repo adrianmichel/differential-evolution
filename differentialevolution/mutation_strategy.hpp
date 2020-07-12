@@ -147,7 +147,7 @@ class mutation_strategy {
   /**
    * type for the tuple returned by the operator() member.
    */
-  typedef boost::tuple<individual_ptr, de::DVectorPtr> mutation_info;
+  using mutation_info = boost::tuple<individual_ptr, de::DVectorPtr>;
 
   /**
    * performs the mutation
@@ -171,7 +171,7 @@ class mutation_strategy {
   double dither() const { return m_args.dither(); }
 };
 
-typedef boost::shared_ptr<mutation_strategy> mutation_strategy_ptr;
+using mutation_strategy_ptr = boost::shared_ptr<mutation_strategy>;
 
 /**
  * Mutation strategy #1

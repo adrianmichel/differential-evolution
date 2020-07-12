@@ -33,10 +33,10 @@
 #include <boost/regex.hpp>
 
 // useful types
-typedef std::vector<std::string> StrVector;
-typedef boost::shared_ptr<StrVector> StrVectorPtr;
-typedef boost::char_separator<char> Separator;
-typedef boost::tokenizer<Separator> Tokenizer;
+using StrVector = std::vector<std::string>;
+using StrVectorPtr = boost::shared_ptr<StrVector>;
+using Separator = boost::char_separator<char>;
+using Tokenizer = boost::tokenizer<Separator>;
 
 // helper macros
 #define ARGS(x) x##_LONG "," x##_SHORT

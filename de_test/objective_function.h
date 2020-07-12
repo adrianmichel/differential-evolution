@@ -78,6 +78,6 @@ class objective_function {
 /**
  * Smart pointer to an objective function
  */
-typedef boost::shared_ptr<objective_function> objective_function_ptr;
+using objective_function_ptr = boost::shared_ptr<objective_function>;
 
 #endif  // DE_OBJECTIVE_FUNCTION_HPP_INCLUDED

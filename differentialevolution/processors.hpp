@@ -137,7 +137,7 @@ class null_processor_listener : public processor_listener {
 /**
  * A pointer to a processor listener
  */
-typedef boost::shared_ptr<processor_listener> processor_listener_ptr;
+using processor_listener_ptr = boost::shared_ptr<processor_listener>;
 
 /**
  * Exception thrown in case of an error in the objective
@@ -177,7 +177,7 @@ class objective_function_factory {
   /**
    * Defines a type pointer to an objective function
    */
-  typedef boost::shared_ptr<T> T_ptr;
+  using T_ptr = boost::shared_ptr<T>;
 
   /**
    * virtual distructor
@@ -201,7 +201,7 @@ template <typename T>
 class processor_traits {
  public:
   // \cond
-  typedef T value_type;
+  using value_type = T;
   static double run(T t, de::DVectorPtr vars) { return t(vars); }
   static T make(T t) { return t; }
   // \endcond
@@ -215,7 +215,7 @@ template <typename T>
 class processor_traits<T*> {
  public:
   // \cond
-  typedef T* value_type;
+  using value_type = T*;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(value_type t) { return t; }
   // \endcond
@@ -229,7 +229,7 @@ template <typename T>
 class processor_traits<boost::shared_ptr<T> > {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  using value_type = boost::shared_ptr<T>;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(value_type t) { return t; }
   // \endcond
@@ -244,7 +244,7 @@ template <typename T>
 class processor_traits<objective_function_factory<T>*> {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  using value_type = boost::shared_ptr<T>;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(objective_function_factory<T>* off) {
     return off->make();
@@ -260,7 +260,7 @@ template <typename T>
 class processor_traits<boost::shared_ptr<objective_function_factory<T> > > {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  using value_type = boost::shared_ptr<T>;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(
       boost::shared_ptr<objective_function_factory<T> > off) {
@@ -278,7 +278,7 @@ template <typename T>
 class processor_traits<objective_function_factory<T>&> {
  public:
   // \cond
-  typedef boost::shared_ptr<T> value_type;
+  using value_type = boost::shared_ptr<T>;
   static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
   static value_type make(objective_function_factory<T>& off) {
     return off.make();
@@ -389,10 +389,10 @@ class processors_exception : exception {
 template <typename T>
 class processors {
  private:
-  typedef boost::shared_ptr<boost::thread_group> thread_group_ptr;
-  typedef boost::shared_ptr<processor<T> > processor_ptr;
-  typedef std::vector<processor_ptr> processor_vector;
-  typedef boost::shared_ptr<T> T_ptr;
+  using thread_group_ptr = boost::shared_ptr<boost::thread_group>;
+  using processor_ptr = boost::shared_ptr<processor<T> >;
+  using processor_vector = std::vector<processor_ptr>;
+  using T_ptr = boost::shared_ptr<T>;
 
  private:
   individual_queue m_indQueue;
@@ -485,7 +485,7 @@ class processors {
   /**
    * A smart pointer to a collection of processors
    */
-  typedef boost::shared_ptr<processors<T> > processors_ptr;
+  using processors_ptr = boost::shared_ptr<processors<T> >;
 };
 
 }  // namespace de
