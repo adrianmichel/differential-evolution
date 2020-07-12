@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "differentialevolution", "differentialevolution", "{FC3C2CC1-B62C-4BC2-8A5B-FB97A427DEA4}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,8 +31,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|Win32.Build.0 = Debug|Win32
-		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|x64.ActiveCfg = Debug|x64
-		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|x64.Build.0 = Debug|x64
+		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|x64.ActiveCfg = Release|x64
+		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Debug|x64.Build.0 = Release|x64
 		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Release|Win32.ActiveCfg = Release|Win32
 		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Release|Win32.Build.0 = Release|Win32
 		{7AC4434E-D141-41DB-9BCF-BFD8022CFE9D}.Release|x64.ActiveCfg = Release|x64
@@ -40,5 +40,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B19C43C6-9127-4215-8C9C-B72328FEE359}
 	EndGlobalSection
 EndGlobal
