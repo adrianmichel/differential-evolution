@@ -53,11 +53,11 @@ using namespace std;
 using namespace amichel::de;
 
 // various constants
-#define MIN_WEIGHT 0
-#define MAX_WEIGHT 2
+constexpr auto minWeight = 0;
+constexpr auto maxWeight = 2;
 
-#define MIN_CROSSOVER 0
-#define MAX_CROSSOVER 1
+constexpr auto minCrossover = 0;
+constexpr auto maxCrossover = 1;
 
 // single character options used
 //
@@ -246,18 +246,18 @@ bool CmdLine::process(int argc, char* argv[]) {
       SET(DEF_CONSTRAINT_MAX, argumentsDefConstraintMax, double)
       SET(SELECTION_STRATEGY, selectionStrategyIndex, size_t)
 
-      if (weight() < MIN_WEIGHT || weight() > MAX_WEIGHT)
+      if (weight() < minWeight || weight() > maxWeight)
         throw CmdLineException(
             (boost::format(
                  "Weight %1% out of range - it must be between [%2%, %3%]") %
-             weight() % MIN_WEIGHT % MAX_WEIGHT)
+             weight() % minWeight % maxWeight)
                 .str());
 
-      if (crossover() < MIN_CROSSOVER || crossover() > MAX_CROSSOVER)
+      if (crossover() < minCrossover || crossover() > maxCrossover)
         throw CmdLineException(
             (boost::format(
                  "Crossover %1% out of range - it must be between [%2%, %3%]") %
-             crossover() % MIN_CROSSOVER % MAX_CROSSOVER)
+             crossover() % minCrossover % maxCrossover)
                 .str());
 
       assert(vm.count(CONSTRAINTS_LONG) > 0);
