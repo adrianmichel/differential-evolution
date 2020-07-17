@@ -213,15 +213,14 @@ bool CmdLine::process(int argc, char* argv[]) {
         std::vector<std::string> configFiles(
             vm[CONFIG_FILE_LONG].as<std::vector<std::string> >());
 
-        for (std::vector<std::string>::size_type n = 0; n < configFiles.size();
-             ++n) {
-          std::ifstream ifs(configFiles[n].c_str());
+        for (auto configFile : configFiles) {
+          std::ifstream ifs(configFile.c_str());
           if (ifs)
             po::store(po::parse_config_file(ifs, desc), vm);
           else
             throw CmdLineException(
                 (boost::format("Couldn't open configuration file: \"%1%\"") %
-                 configFiles[n])
+                 configFile)
                     .str());
         }
       }

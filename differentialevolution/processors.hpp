@@ -434,10 +434,8 @@ class processors {
     // threads
     m_threads = std::make_shared<boost::thread_group>();
 
-    for (typename processor_vector::size_type n = 0; n < m_processors.size();
-         ++n) {
-      processor_ptr p(m_processors[n]);
-      boost::thread* th(new boost::thread(boost::ref(*p)));
+    for (processor_ptr processor : m_processors){
+      boost::thread* th(new boost::thread(boost::ref(*processor)));
       m_threads->add_thread(th);
     }
   }
@@ -462,10 +460,10 @@ class processors {
    * @return bool true if success, false if an error occured
    */
   bool success() {
-    for (typename processor_vector::size_type n = 0; n < m_processors.size();
-         ++n) {
-      processor_ptr processor(m_processors[n]);
-      if (!processor->success()) return false;
+    for (processor_ptr processor : m_processors) {
+      if (!processor->success()) {
+        return false;
+      }
     }
 
     return true;
