@@ -124,16 +124,16 @@ void testFunctions(const CmdLine& cmdLine) {
       constraints, cmdLine.minimize(), terminationStrategy, selectionStrategy,
       mutationStrategy, listener);
 
-  // run the optization process
+  // run the optimization process
   de.run();
 }
 
 int main(int argc, char* argv[]) {
   try {
-    // instantiate a command ine object
+    // instantiate a command line object
     CmdLine cmdLine;
 
-    // if command line processing was succesful, run the test
+    // if command line processing was successful, run the test
     if (cmdLine.process(argc, argv)) testFunctions(cmdLine);
 
     return 0;

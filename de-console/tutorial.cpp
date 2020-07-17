@@ -82,7 +82,7 @@ void simpleUsage() {
                                                          processor_listener));
 
     /**
-     * Instantiate a simple termination strategy wich will stop the
+     * Instantiate a simple termination strategy which will stop the
      * optimization process after 10000 generations
      */
     termination_strategy_ptr terminationStrategy(

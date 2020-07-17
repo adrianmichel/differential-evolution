@@ -486,13 +486,13 @@ class constraints : public constraints_base {
 
   /**
    * Initializes a collection of constraints from string
-   * descsriptions. Currently used only for range based
+   * descriptions. Currently used only for range based
    * constraints.
    *
    * A constraint can be described as "type;min;max" where type
    * can be real or integer and min and max are the range limits.
    *
-   * @param str a a collection (vector) of constraint description
+   * @param str a collection (vector) of constraint description
    *  		  strings, each string describing constraints for
    *  		  one variable
    * @param var_count the total number of variables (can be
