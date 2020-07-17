@@ -448,10 +448,13 @@ class processors {
   void wait() {
     m_threads->join_all();
 
-    if (!m_indQueue.empty())
+    if (!m_indQueue.empty()) {
       throw processors_exception("threads ended before emptying the queue");
+    }
 
-    if (!success()) throw processors_exception("objective function error");
+    if (!success()) {
+      throw processors_exception("objective function error");
+    }
   }
 
   /**
@@ -476,8 +479,7 @@ class processors {
    * @param population
    */
   void push(population_ptr population) {
-    std::copy(population->begin(), population->end(),
-              std::back_inserter(m_indQueue));
+    std::copy(population->begin(), population->end(), std::back_inserter(m_indQueue));
   }
 
   /**
