@@ -16,14 +16,14 @@
 #include <differential_evolution.hpp>
 #include "objective_function.h"
 
-/**
- * \defgroup de-console
- * @{
- */
+ /**
+  * \defgroup de-console
+  * @{
+  */
 
-// x^2 - has a min 0
+  // x^2 - has a min 0
 class x_sqr_min_function : public objective_function {
- public:
+public:
   x_sqr_min_function() : objective_function("x sqr min function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
@@ -37,14 +37,14 @@ class x_sqr_min_function : public objective_function {
 
 // -(x^2) has a max of 0
 class x_sqr_max_function : public objective_function {
- public:
+public:
   x_sqr_max_function() : objective_function("- x sqr max function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) { return -pow((*args)[0], 2); }
 };
 
 class AnotherSimpleFunction : public objective_function {
- public:
+public:
   AnotherSimpleFunction() : objective_function("a simple function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
@@ -53,7 +53,7 @@ class AnotherSimpleFunction : public objective_function {
 };
 
 class SphereFunction : public objective_function {
- public:
+public:
   SphereFunction() : objective_function("Sphere function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
@@ -64,7 +64,7 @@ class SphereFunction : public objective_function {
 };
 
 class AckleyFunction : public objective_function {
- public:
+public:
   AckleyFunction() : objective_function("Auckley function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
@@ -84,7 +84,7 @@ class AckleyFunction : public objective_function {
 };
 
 class SecondDeJongFunction : public objective_function {
- public:
+public:
   SecondDeJongFunction() : objective_function("Second DeJong function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
@@ -97,16 +97,16 @@ class SecondDeJongFunction : public objective_function {
 
 // min: -1.031628453
 class SixHumpCamelBackFunction : public objective_function {
- public:
+public:
   SixHumpCamelBackFunction()
-      : objective_function("Six hump camel back function") {}
+    : objective_function("Six hump camel back function") {}
 
   virtual double operator()(amichel::de::DVectorPtr args) {
     double x1((*args)[0]);
     double x2((*args)[1]);
 
     return (4.0 - 2.1 * x1 * x1 + pow(x1, 4) / 3) * x1 * x1 + x1 * x2 +
-           (-4.0 + 4.0 * x2 * x2) * x2 * x2;
+      (-4.0 + 4.0 * x2 * x2) * x2 * x2;
   }
 };
 

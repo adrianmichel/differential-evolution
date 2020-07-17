@@ -11,6 +11,7 @@
 #pragma once
 
 #include <memory>
+#include <iostream>
 
 #include <de_types.hpp>
 #include <processors.hpp>

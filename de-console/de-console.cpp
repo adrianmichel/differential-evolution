@@ -9,68 +9,16 @@
  */
 
 #include <differential_evolution.hpp>
-#include <iostream>
-#include <listener.hpp>
+
+#include <test_listener.h>
+#include <test_processor_listener.h>
 
 #include "cmdline.h"
 #include "testfunctions.h"
 
 using namespace amichel::de;
 
-/**
- * Basic Differential Evolution listener - displays the
- * generation cout and the best cost.
- */
-class DETestListener : public amichel::de::listener {
- public:
-  virtual void start() {}
 
-  virtual void end() {}
-
-  virtual void error() {}
-
-  virtual void startGeneration(size_t genCount) {}
-
-  virtual void endGeneration(size_t genCount, individual_ptr bestIndGen,
-                             individual_ptr bestInd) {
-    std::cout << (boost::format("genCount: %1%, cost: %2%\n") % genCount %
-                  bestInd->cost())
-                     .str();
-  }
-
-  virtual void startSelection(size_t genCount) {}
-
-  virtual void endSelection(size_t genCount) {}
-
-  virtual void startProcessors(size_t genCount) {}
-
-  virtual void endProcessors(size_t genCount) {}
-};
-
-/**
- * Very basic processor listener that doesn't do anything.
- *
- * It shows however how to setup a thread safe listener, by
- * using synchronization objects.
- */
-class DETestProcessorListener : public processor_listener {
-	amichel::de::mutex m_mx;
-
- public:
-  virtual void start(size_t index) { lock lock(m_mx); }
-
-  virtual void start_of(size_t index, individual_ptr ind) {
-    lock lock(m_mx);
-  }
-
-  virtual void end_of(size_t index, individual_ptr ind) { lock lock(m_mx); }
-
-  virtual void end(size_t index) { lock lock(m_mx); }
-
-  virtual void error(size_t index, const std::string& message) {
-    lock lock(m_mx);
-  }
-};
 
 /**
  * Runs the Differential Evolution optimization process on

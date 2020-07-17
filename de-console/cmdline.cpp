@@ -14,7 +14,7 @@
 #include <boost/tokenizer.hpp>
 #include <fstream>
 #include <iostream>
-#include "testfunctions.h"
+#include "test_functions.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
