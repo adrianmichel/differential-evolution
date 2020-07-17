@@ -194,7 +194,7 @@ class objective_function_factory {
 };
 
 /**
- * Base processor traits for the case where the objecive
+ * Base processor traits for the case where the objective
  * function is passed by reference and copied
  */
 template <typename T>
