@@ -9,18 +9,11 @@
  */
 
 /**
- * \defgroup de_test de_test command line application
+ * \defgroup de-console de-console command line application
  * @{
  */
 
-#ifndef DE_TEST_CMDLINE_H_INCLUDED
-#define DE_TEST_CMDLINE_H_INCLUDED
-
-// MS compatible compilers support #pragma once
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
-#endif
 
 #include <de_constraints.hpp>
 #include <mutation_strategy.hpp>
@@ -107,5 +100,3 @@ class CmdLineException : public amichel::de::exception {
 /**
  * @}
  */
-
-#endif  // DE_TEST_CMDLINE_H_INCLUDED

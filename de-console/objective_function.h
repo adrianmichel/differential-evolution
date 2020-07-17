@@ -8,14 +8,7 @@
  * or at https://opensource.org/licenses/BSD-3-Clause
  */
 
-#ifndef DE_OBJECTIVE_FUNCTION_HPP_INCLUDED
-#define DE_OBJECTIVE_FUNCTION_HPP_INCLUDED
-
-// MS compatible compilers support #pragma once
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
-#endif
 
 #include <memory>
 
@@ -80,4 +73,3 @@ class objective_function {
  */
 using objective_function_ptr = std::shared_ptr<objective_function>;
 
-#endif  // DE_OBJECTIVE_FUNCTION_HPP_INCLUDED

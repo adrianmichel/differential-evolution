@@ -3,7 +3,7 @@
 
 	- \subpage overview
 	- \subpage tutorial
-	- \subpage de_test
+	- \subpage de-console
 	- \subpage library
 	- \subpage contact
 	- \subpage credits
@@ -46,6 +46,6 @@ The documentation was generated with Doxygen V 1.7.5.1 - http://www.doxygen.org 
 Email info@amichel.com with questions, feedback, feature requests
 */
 
-/*! \page de_test The test project (de_test)
-	\htmlinclude de_test.htm
+/*! \page de-console The console project (de-console)
+	\htmlinclude de-console.htm
 */

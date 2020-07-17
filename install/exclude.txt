@@ -6,8 +6,8 @@ install
 *.vss*
 *.vtg
 *.vpj
-de_test\Debug
-de_test\Release
+de-console\Debug
+de-console\Release
 *.ilk
 *.pdb
 *.SCC

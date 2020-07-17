@@ -237,13 +237,13 @@ void simpleUsage()
 ```
 
 ## The test project
-### What is de_test
+### What is de-console
 
-The de_test project included in the package is a command line application that is used to find the max or min values of several test functions commonly used to benchmark optimization algorithms. These functions, such as Ackley, De Jong etc, are generally hard to optimize because of properties like many local minimia or global minimia surrounded by a high gradient region etc. Here is a page describing several of these functions http://www.geatbx.com/docu/fcnindex-01.html#P247_13252 .
+The de-console project included in the package is a command line application that is used to find the max or min values of several test functions commonly used to benchmark optimization algorithms. These functions, such as Ackley, De Jong etc, are generally hard to optimize because of properties like many local minimia or global minimia surrounded by a high gradient region etc. Here is a page describing several of these functions http://www.geatbx.com/docu/fcnindex-01.html#P247_13252 .
 
-The purpose of this project is to illustrate the use of the DE C++ library in a real application, but de_test can be used as a starting point for more complex application or can even be used to solve real optimization problems by adding new objective functions.
+The purpose of this project is to illustrate the use of the DE C++ library in a real application, but de-console can be used as a starting point for more complex application or can even be used to solve real optimization problems by adding new objective functions.
 
-### Building de_test
+### Building de-console
 
 The current version is released as a Visual Studio 2015 project that compiles and runs on Windows. A Linux version is currently being worked on.
 
@@ -265,11 +265,11 @@ b2 --toolset=msvc-14.0 --with-thread --with-regex --with-date_time --with-progra
 
 then from the console window run "build.bat". This will build all the boost libraries required by the DE project, and once it's done, you can then build and run the DE project from the VS IDE.
 
-### Running de_test
+### Running de-console
 
 #### Command line arguments
 
-The de_test command line application requires setting several command line arguments for a succesful run.
+The de-console command line application requires setting several command line arguments for a succesful run.
 
 The arguments can be passed either on the command line or in a configuration file.
 

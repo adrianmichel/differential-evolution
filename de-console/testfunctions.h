@@ -17,7 +17,7 @@
 #include "objective_function.h"
 
 /**
- * \defgroup de_test
+ * \defgroup de-console
  * @{
  */
 
