@@ -311,9 +311,9 @@ class int_constraint : public range_constraint {
 
     double val = boost::math::round(genrand(_min, _max));
 
-    for (; val < _min || val > _max;
-         val = boost::math::round(genrand(_min, _max)))
-      ;
+    while (val < _min || val > _max) {
+      val = boost::math::round(genrand(_min, _max));
+    }
 
     return val;
   }
