@@ -14,7 +14,7 @@
 #include <test_processor_listener.h>
 
 #include "cmdline.h"
-#include "testfunctions.h"
+#include "test_functions.h"
 
 using namespace amichel::de;
 

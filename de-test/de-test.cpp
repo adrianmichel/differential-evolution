@@ -60,8 +60,8 @@ de::individual_ptr runTest(de::constraints_ptr constraints, objective_function_p
  * f(x,y) = x^2 + y^2
  */
 
-constexpr auto VARS_COUNT = 20;
-constexpr auto POPULATION_SIZE = 200;
+constexpr auto varsCount = 20;
+constexpr auto populationSize = 200;
 constexpr auto processorCount = 4;
 constexpr auto maxGeneration = 1000;
 constexpr auto weight = 0.5;
@@ -75,7 +75,7 @@ namespace de_test
 
 		TEST_METHOD(TestSphere)
 		{
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(VARS_COUNT, -1.0e6, 1.0e6));
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
       (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
       (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
 
@@ -83,13 +83,109 @@ namespace de_test
       de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
       de::mutation_strategy_arguments mutation_arguments(weight, crossover);
       de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(VARS_COUNT,
+        std::make_shared<de::mutation_strategy_1>(varsCount,
           mutation_arguments));
 
 
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, VARS_COUNT, POPULATION_SIZE, minimize);
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
 
       Assert::IsTrue(1e-100 > best->cost());
 		}
-	};
-}
+
+    TEST_METHOD(TestSphere1)
+    {
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+      objective_function_ptr of(std::make_shared<SphereFunction>());
+      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
+      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+      de::mutation_strategy_ptr mutationStrategy(
+        std::make_shared<de::mutation_strategy_1>(varsCount,
+          mutation_arguments));
+
+
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+
+      Assert::IsTrue(1e-100 > best->cost());
+    }
+
+    TEST_METHOD(TestSquare)
+    {
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+      objective_function_ptr of(std::make_shared<x_sqr_min_function>());
+      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
+      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+      de::mutation_strategy_ptr mutationStrategy(
+        std::make_shared<de::mutation_strategy_1>(varsCount,
+          mutation_arguments));
+
+
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+
+      Assert::IsTrue(1e-100 > best->cost());
+    }
+
+    TEST_METHOD(TestSquare1)
+    {
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+      objective_function_ptr of(std::make_shared<x_sqr_min_function>());
+      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
+      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+      de::mutation_strategy_ptr mutationStrategy(
+        std::make_shared<de::mutation_strategy_1>(varsCount,
+          mutation_arguments));
+
+
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+
+      Assert::IsTrue(1e-100 > best->cost());
+    }
+
+    TEST_METHOD(TestSixHumpCamel)
+    {
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+      objective_function_ptr of(std::make_shared<SixHumpCamelBackFunction>());
+      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
+      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+      de::mutation_strategy_ptr mutationStrategy(
+        std::make_shared<de::mutation_strategy_1>(varsCount,
+          mutation_arguments));
+
+
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+
+      Assert::IsTrue(-1.031628 > best->cost() && -1.031629 < best->cost());
+    }
+
+    TEST_METHOD(TestSixHumpCamel1)
+    {
+      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+      objective_function_ptr of(std::make_shared<SixHumpCamelBackFunction>());
+      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
+      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+      de::mutation_strategy_ptr mutationStrategy(
+        std::make_shared<de::mutation_strategy_1>(varsCount,
+          mutation_arguments));
+
+
+      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+
+      Assert::IsTrue(-1.031628 > best->cost() && -1.031629 < best->cost());
+    }
+  };
+};
+
