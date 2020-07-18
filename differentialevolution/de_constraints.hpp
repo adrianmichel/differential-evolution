@@ -142,7 +142,7 @@ class range_constraint : public constraint {
 
 /**
  * A real constraint. Specifies that variables can have any
- * double value, whitin the specified limits.
+ * double value, within the specified limits.
  */
 class real_constraint : public range_constraint {
  public:
@@ -180,27 +180,36 @@ class real_constraint : public range_constraint {
     double ret = value;
 
     while (ret < range_constraint::min()) {
-      ret = range_constraint::min() +
-            genrand() * (origin - range_constraint::min());
+      ret = range_constraint::min() + genrand() * (origin - range_constraint::min());
     }
 
     while (ret > range_constraint::max()) {
-      ret = range_constraint::max() +
-            genrand() * (origin - range_constraint::max());
+      ret = range_constraint::max() + genrand() * (origin - range_constraint::max());
     }
 
     return ret;
   }
 
-  virtual double get_rand_value_in_zone(double origin, double zonePct) const {
-    if (origin > max()) throw constraints_exception("origin coordinate > max");
-    if (origin < min()) throw constraints_exception("origin coordinate < min");
+  double get_rand_value_in_zone(double origin, double zonePct) const override {
+    if (origin > max()) {
+      throw constraints_exception("origin coordinate > max");
+    }
 
-    if (zonePct > 100.0) throw constraints_exception("zonePct > 100%");
+    if (origin < min()) {
+      throw constraints_exception("origin coordinate < min");
+    }
 
-    if (zonePct < 0) throw constraints_exception("zonePct < 0%");
+    if (zonePct > 100.0) {
+      throw constraints_exception("zonePct > 100%");
+    }
 
-    if (zonePct == 0) throw constraints_exception("zonePct == 0%");
+    if (zonePct < 0) {
+      throw constraints_exception("zonePct < 0%");
+    }
+
+    if (zonePct == 0) {
+      throw constraints_exception("zonePct == 0%");
+    }
 
     double zoneSize = (max() - min()) * zonePct / 100.0;
 
@@ -253,14 +262,12 @@ class int_constraint : public range_constraint {
     double ret = boost::math::round(value);
 
     while (ret < range_constraint::min()) {
-      ret = range_constraint::min() +
-            genrand() * (origin - range_constraint::min());
+      ret = range_constraint::min() + genrand() * (origin - range_constraint::min());
       ret = boost::math::round(ret);
     }
 
     while (ret > range_constraint::max()) {
-      ret = range_constraint::max() +
-            genrand() * (origin - range_constraint::max());
+      ret = range_constraint::max() + genrand() * (origin - range_constraint::max());
       ret = boost::math::round(ret);
     }
 
@@ -268,14 +275,25 @@ class int_constraint : public range_constraint {
   }
 
   virtual double get_rand_value_in_zone(double origin, double zonePct) const {
-    if (origin > max()) throw constraints_exception("origin coordinate > max");
-    if (origin < min()) throw constraints_exception("origin coordinate < min");
+    if (origin > max()) {
+      throw constraints_exception("origin coordinate > max");
+    }
 
-    if (zonePct > 100.0) throw constraints_exception("zonePct > 100%");
+    if (origin < min()) {
+      throw constraints_exception("origin coordinate < min");
+    }
 
-    if (zonePct < 0) throw constraints_exception("zonePct < 0%");
+    if (zonePct > 100.0) {
+      throw constraints_exception("zonePct > 100%");
+    }
 
-    if (zonePct == 0) throw constraints_exception("zonePct == 0%");
+    if (zonePct < 0) {
+      throw constraints_exception("zonePct < 0%");
+    }
+
+    if (zonePct == 0) {
+      throw constraints_exception("zonePct == 0%");
+    }
 
     double zoneSize = (max() - min()) * zonePct / 100.0;
 
@@ -310,19 +328,21 @@ class set_constraint : public constraint {
 
    public:
     double min() const {
-      if (m_unique.size() > 0)
+      if (m_unique.size() > 0) {
         return *m_unique.begin();
-      else
-        throw constraints_exception(
-            "could not get the min value of an empty set constraint");
+      }
+      else {
+        throw constraints_exception("could not get the min value of an empty set constraint");
+      }
     }
 
     double max() const {
-      if (m_unique.size() > 0)
+      if (m_unique.size() > 0) {
         return *m_unique.rbegin();
-      else
-        throw constraints_exception(
-            "could not get the max value of an empty set constraint");
+      }
+      else {
+        throw constraints_exception("could not get the max value of an empty set constraint");
+      }
     }
 
    private:
@@ -343,8 +363,7 @@ class set_constraint : public constraint {
    */
   set_constraint(const de::DVector& values) {
     // making sure the values in the "set" are unique
-    std::remove_copy_if(values.begin(), values.end(),
-                        std::back_inserter(m_values), m_unique);
+    std::remove_copy_if(values.begin(), values.end(), std::back_inserter(m_values), m_unique);
   }
 
   /**
@@ -354,7 +373,9 @@ class set_constraint : public constraint {
    * @param value
    */
   void add_value(de::Double value) {
-    if (m_unique(value)) m_values.push_back(value);
+    if (m_unique(value)) {
+      m_values.push_back(value);
+    }
   }
 
   /**
@@ -394,13 +415,11 @@ class set_constraint : public constraint {
   double max() const { return m_unique.max(); }
 
   virtual double get_rand_value_in_zone(double origin, double zonePct) const {
-    throw constraints_exception(
-        "get_rand_value_in_zone only supported for range constraints");
+    throw constraints_exception("get_rand_value_in_zone only supported for range constraints");
   }
 
   virtual double get_middle_point() {
-    throw constraints_exception(
-        "get_middle_point not supported by set constraint");
+    throw constraints_exception("get_middle_point not supported by set constraint");
   }
 };
 
@@ -441,13 +460,11 @@ class boolean_constraint : public constraint {
   double max() const { return 1; }
 
   virtual double get_rand_value_in_zone(double origin, double zonePct) const {
-    throw constraints_exception(
-        "get_rand_value_in_zone only supported for range constraints");
+    throw constraints_exception("get_rand_value_in_zone only supported for range constraints");
   }
 
   virtual double get_middle_point() {
-    throw constraints_exception(
-        "get_middle_point not supported by bool constraint");
+    throw constraints_exception("get_middle_point not supported by bool constraint");
   }
 };
 
@@ -475,8 +492,7 @@ class constraints : public constraints_base {
    * @param defMax default max limit
    */
   constraints(size_t varCount, double defMin, double defMax)
-      : constraints_base(varCount,
-                         std::make_shared<real_constraint>(defMin, defMax)) {}
+      : constraints_base(varCount, std::make_shared<real_constraint>(defMin, defMax)) {}
 
   /**
    * Initializes a collection of constraints from string
@@ -502,10 +518,8 @@ class constraints : public constraints_base {
    *  			 variables is higher than the number of
    *  			 constraints specified as strings.
    */
-  constraints(const std::vector<std::string>& str, size_t var_count,
-              double def_min, double def_max)
-      : constraints_base(
-            var_count, std::make_shared<real_constraint>(def_min, def_max)) {
+  constraints(const std::vector<std::string>& str, size_t var_count, double def_min, double def_max)
+      : constraints_base( var_count, std::make_shared<real_constraint>(def_min, def_max)) {
     for (std::vector<std::string>::size_type i = 0; i < str.size(); ++i) {
       tokenizer tokens(str[i], separator(";,"));
 
@@ -515,8 +529,7 @@ class constraints : public constraints_base {
 
       size_t count(0);
 
-      for (tokenizer::const_iterator j = tokens.begin(); j != tokens.end();
-           ++j, ++count) {
+      for (tokenizer::const_iterator j = tokens.begin(); j != tokens.end(); ++j, ++count) {
         const std::string token(boost::trim_copy(*j));
 
         try {
@@ -532,31 +545,25 @@ class constraints : public constraints_base {
               break;
             default:
               // too many fields
-              throw constraints_exception(
-                  (boost::format(
-                       "wrong variable format in \"%1%\" - too many fields") %
-                   str[i])
-                      .str());
+              throw constraints_exception((boost::format("wrong variable format in \"%1%\" - too many fields") % str[i]) .str());
           }
-        } catch (const boost::bad_lexical_cast&) {
-          throw constraints_exception(
-              (boost::format("wrong floating point number format: %1%") % token)
-                  .str());
+        }
+        catch (const boost::bad_lexical_cast&) {
+          throw constraints_exception((boost::format("wrong floating point number format: %1%") % token).str());
         }
       }
 
       // too few fields
-      if (count < 3)
-        throw constraints_exception(
-            (boost::format(
-                 "wrong variable format in \"%1%\" - too few fields") %
-             str[i])
-                .str());
+      if (count < 3) {
+        throw constraints_exception((boost::format("wrong variable format in \"%1%\" - too few fields") % str[i]).str());
+      }
 
-      if (i < var_count)
+      if (i < var_count) {
         constraints_base::at(i) = str_to_constraint(type, _min, _max);
-      else
+      }
+      else {
         constraints_base::push_back(str_to_constraint(type, _min, _max));
+      }
     }
   }
 
@@ -567,14 +574,13 @@ class constraints : public constraints_base {
    * @return double
    */
   double get_rand_value(size_t index) {
-    if (index < constraints_base::size())
+    if (index < constraints_base::size()) {
       return (*this)[index]->get_rand_value();
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint index: %1%, higher than max "
-                         "number of constraints: %2%") %
-           index % constraints_base::size())
-              .str());
+    }
+    else {
+      throw constraints_exception((boost::format("invalid constraint index: %1%, higher than max number of constraints: %2%") %
+          index % constraints_base::size()).str());
+    }
   }
 
   /**
@@ -588,14 +594,13 @@ class constraints : public constraints_base {
    * @return double
    */
   double get_rand_value(size_t index, double value, double origin) {
-    if (index < constraints_base::size())
+    if (index < constraints_base::size()) {
       return (*this)[index]->get_rand_value(value, origin);
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint index: %1%, higher than max "
-                         "number of constraints: %2%") %
-           index % constraints_base::size())
-              .str());
+    }
+    else {
+      throw constraints_exception((boost::format("invalid constraint index: %1%, higher than max number of constraints: %2%") %
+        index % constraints_base::size()).str());
+    }
   }
 
   /**
@@ -609,8 +614,7 @@ class constraints : public constraints_base {
    *
    * @return DVectorPtr
    */
-  DVectorPtr get_square_zone_rand_values(const DVectorPtr origin,
-                                         double sidePct) const {
+  DVectorPtr get_square_zone_rand_values(const DVectorPtr origin, double sidePct) const {
     assert(origin);
     assert(sidePct > 0 && sidePct <= 100);
 
@@ -618,15 +622,14 @@ class constraints : public constraints_base {
       DVectorPtr square(std::make_shared<DVector>(origin->size()));
 
       for (constraints_base::size_type n = 0; n < constraints_base::size(); ++n)
-        (*square)[n] =
-            (*this)[n]->get_rand_value_in_zone((*origin)[n], sidePct);
+        (*square)[n] = (*this)[n]->get_rand_value_in_zone((*origin)[n], sidePct);
 
       return square;
 
-    } else
-      throw constraints_exception(
-          "The origin vector must have the same number of elements as there "
-          "are constraints");
+    }
+    else {
+      throw constraints_exception("The origin vector must have the same number of elements as there are constraints");
+    }
   }
 
   DVectorPtr get_middle_point() {
@@ -654,16 +657,16 @@ class constraints : public constraints_base {
   }
 
  private:
-  constraint_ptr str_to_constraint(const std::string& type, double min,
-                                   double max) {
-    if (boost::to_lower_copy(type) == "real")
+  constraint_ptr str_to_constraint(const std::string& type, double min, double max) {
+    if (boost::to_lower_copy(type) == "real") {
       return std::make_shared<real_constraint>(min, max);
-    else if (boost::to_lower_copy(type) == "int" ||
-             boost::to_lower_copy(type) == "integer")
+    }
+    else if (boost::to_lower_copy(type) == "int" || boost::to_lower_copy(type) == "integer") {
       return std::make_shared<int_constraint>(min, max);
-    else
-      throw constraints_exception(
-          (boost::format("invalid constraint type \"%1%\"") % type).str());
+    }
+    else {
+      throw constraints_exception((boost::format("invalid constraint type \"%1%\"") % type).str());
+    }
   }
 };
 

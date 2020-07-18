@@ -85,15 +85,18 @@ int main(int argc, char* argv[]) {
     if (cmdLine.process(argc, argv)) testFunctions(cmdLine);
 
     return 0;
-  } catch (const CmdLineException& e) {
+  }
+  catch (const CmdLineException& e) {
     // there has been a cmd line error
     std::cout << "Command line parameter error: " << e.what() << std::endl;
     return 1;
-  } catch (const exception& e) {
+  }
+  catch (const exception& e) {
     // there has been some error, must likely triggered by a boost object.
     std::cout << e.what() << std::endl;
     return 1;
-  } catch (const std::exception& e) {
+  }
+  catch (const std::exception& e) {
     // catching all other exceptions, so the process won't crash
     // this most likely indicates a bug (memory issue, null pointer etc).
     std::cout << e.what() << std::endl;
