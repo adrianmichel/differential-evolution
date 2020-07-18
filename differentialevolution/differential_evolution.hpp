@@ -41,7 +41,7 @@ class differential_evolution_exception {};
  * Runs an optimization session based on various input
  * parameters or strategies
  */
-template <typename T>
+template <typename ObjectiveFunction>
 class differential_evolution {
  private:
   const size_t m_varCount;
@@ -52,7 +52,7 @@ class differential_evolution {
   individual_ptr m_bestInd;
 
   constraints_ptr m_constraints;
-  typename processors<T>::processors_ptr m_processors;
+  typename processors<ObjectiveFunction>::processors_ptr m_processors;
   termination_strategy_ptr m_terminationStrategy;
   selection_strategy_ptr m_selectionStrategy;
   mutation_strategy_ptr m_mutationStrategy;
@@ -84,7 +84,7 @@ class differential_evolution {
    * @param listener a listener
    */
   differential_evolution(size_t varCount, size_t popSize,
-                         typename processors<T>::processors_ptr processors,
+                         typename processors<ObjectiveFunction>::processors_ptr processors,
                          constraints_ptr constraints, bool minimize,
                          termination_strategy_ptr terminationStrategy,
                          selection_strategy_ptr selectionStrategy,

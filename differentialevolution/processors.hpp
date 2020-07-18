@@ -294,10 +294,10 @@ class processor_traits<objective_function_factory<T>&> {
  * The processor class uses the type of the objective function
  * defined in the corresponding processor_traits
  */
-template <typename T>
+template <typename ObjectiveFunction>
 class processor : boost::noncopyable {
  private:
-  typename processor_traits<T>::value_type m_of;
+  typename processor_traits<ObjectiveFunction>::value_type m_of;
   individual_queue& m_indQueue;
   processor_listener_ptr m_listener;
   size_t m_index;
@@ -316,9 +316,9 @@ class processor : boost::noncopyable {
    *  			   important events during the processing of the
    *  			   objective function
    */
-  processor(size_t index, T of, individual_queue& indQueue,
+  processor(size_t index, ObjectiveFunction of, individual_queue& indQueue,
             processor_listener_ptr listener)
-      : m_of(processor_traits<T>::make(of)),
+      : m_of(processor_traits<ObjectiveFunction>::make(of)),
         m_indQueue(indQueue),
         m_result(false),
         m_listener(listener),
@@ -336,7 +336,7 @@ class processor : boost::noncopyable {
     try {
       for (individual_ptr ind = m_indQueue.pop(); ind; ind = m_indQueue.pop()) {
         m_listener->start_of(m_index, ind);
-        double result = processor_traits<T>::run(m_of, ind->vars());
+        double result = processor_traits<ObjectiveFunction>::run(m_of, ind->vars());
 
         ind->setCost(result);
         m_listener->end_of(m_index, ind);
@@ -386,13 +386,12 @@ class processors_exception : exception {
  * function factory as argument (reference, pointer or
  * shared_ptr)
  */
-template <typename T>
+template <typename ObjectiveFunction>
 class processors {
  private:
   using thread_group_ptr = std::shared_ptr<boost::thread_group>;
-  using processor_ptr = std::shared_ptr<processor<T> >;
+  using processor_ptr = std::shared_ptr<processor<ObjectiveFunction> >;
   using processor_vector = std::vector<processor_ptr>;
-  using T_ptr = std::shared_ptr<T>;
 
  private:
   individual_queue m_indQueue;
@@ -408,14 +407,14 @@ class processors {
    * @param of objective function or objective function factory
    * @param listener a listener passed to each created processor
    */
-  processors(size_t count, T of, processor_listener_ptr listener) {
+  processors(size_t count, ObjectiveFunction of, processor_listener_ptr listener) {
     assert(count > 0);
     assert(listener);
 
     for (size_t n = 0; n < count; ++n) {
-      processor_ptr processor(std::make_shared<processor<T> >(
+      processor_ptr processor(std::make_shared<processor<ObjectiveFunction> >(
           n, of, boost::ref(m_indQueue), listener));
-      m_processors.push_back(processors<T>::processor_ptr(processor));
+      m_processors.push_back(processors<ObjectiveFunction>::processor_ptr(processor));
     }
   }
 
@@ -485,7 +484,7 @@ class processors {
   /**
    * A smart pointer to a collection of processors
    */
-  using processors_ptr = std::shared_ptr<processors<T> >;
+  using processors_ptr = std::shared_ptr<processors<ObjectiveFunction> >;
 };
 
 }  // namespace de
