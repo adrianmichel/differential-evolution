@@ -530,7 +530,7 @@ class constraints : public constraints_base {
   constraints(const std::vector<std::string>& str, size_t var_count, double def_min, double def_max)
       : constraints_base( var_count, std::make_shared<real_constraint>(def_min, def_max)) {
     for (std::vector<std::string>::size_type i = 0; i < str.size(); ++i) {
-      tokenizer tokens(str[i], separator(";,"));
+      tokenizer tokens(str[i], separator(":;,"));
 
       std::string type;
       double _min;
