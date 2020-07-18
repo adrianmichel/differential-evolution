@@ -28,11 +28,6 @@ namespace de {
  */
 class constraints_exception : public exception {
  public:
-  /**
-   * constructor that takes the error message as argument
-   *
-   * @param message
-   */
   constraints_exception(const std::string& message)
       : exception(message.c_str()) {}
 };
@@ -94,8 +89,7 @@ class constraint {
    *
    * @return double
    */
-  virtual double get_rand_value_in_zone(double origin,
-                                        double zonePct) const = 0;
+  virtual double get_rand_value_in_zone(double origin, double zonePct) const = 0;
 
   /**
    * Gets the point midway between min and max - will only work

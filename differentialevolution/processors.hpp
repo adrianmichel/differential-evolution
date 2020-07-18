@@ -209,7 +209,7 @@ class processor_traits {
 
 /**
  * specialized processor traits for the case where the objective
- * function is passed as a ponter
+ * function is passed as a pointer
  */
 template <typename T>
 class processor_traits<T*> {
@@ -236,7 +236,7 @@ class processor_traits<std::shared_ptr<T> > {
 };
 
 /**
- * Specialized processor traits for the case wehere the
+ * Specialized processor traits for the case where the
  * processor receives a pointer to an objective function
  * factory.
  */
@@ -252,7 +252,7 @@ class processor_traits<objective_function_factory<T>*> {
   // \endcond
 };
 /**
- * Specialized processor traits for the case wehere the
+ * Specialized processor traits for the case where the
  * processor receives a shared pointer to an objective function
  * factory.
  */
@@ -270,7 +270,7 @@ class processor_traits<std::shared_ptr<objective_function_factory<T> > > {
 };
 
 /**
- * Specialized processor traits for the case wehere the
+ * Specialized processor traits for the case where the
  * processor receives a reference to an objective
  * function factory.
  */

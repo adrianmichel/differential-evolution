@@ -137,17 +137,14 @@ class differential_evolution {
       m_listener->start();
       individual_ptr bestIndIteration(m_bestInd);
 
-      for (size_t genCount = 0;
-           m_terminationStrategy->event(m_bestInd, genCount); ++genCount) {
+      for (size_t genCount = 0; m_terminationStrategy->event(m_bestInd, genCount); ++genCount) {
         m_listener->startGeneration(genCount);
         for (size_t i = 0; i < m_popSize; ++i) {
-          mutation_strategy::mutation_info mutationInfo(
-              (*m_mutationStrategy)(*m_pop1, bestIndIteration, i));
+          mutation_strategy::mutation_info mutationInfo((*m_mutationStrategy)(*m_pop1, bestIndIteration, i));
 
           individual_ptr tmpInd(boost::tuples::get<0>(mutationInfo));
 
-          tmpInd->ensureConstraints(m_constraints,
-                                    boost::tuples::get<1>(mutationInfo));
+          tmpInd->ensureConstraints(m_constraints, boost::tuples::get<1>(mutationInfo));
 
           // populate the queue
           m_processors->push(tmpInd);
@@ -175,7 +172,8 @@ class differential_evolution {
 
       BOOST_SCOPE_EXIT_TPL((m_listener)) { m_listener->end(); }
       BOOST_SCOPE_EXIT_END
-    } catch (const processors_exception&) {
+    }
+    catch (const processors_exception&) {
       m_listener->error();
       throw differential_evolution_exception();
     }
