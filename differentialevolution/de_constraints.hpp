@@ -20,6 +20,15 @@
 #include "de_types.hpp"
 #include "random_generator.hpp"
 
+#if defined(max)
+#undef max
+#endif
+
+#if defined(min)
+#undef min
+#endif
+
+
 namespace amichel {
 namespace de {
 
