@@ -325,27 +325,13 @@ bool CmdLine::process(int argc, char* argv[]) {
 }
 
 void CmdLine::notice(std::ostream& os) {
-  os << "----------------------------------------------------------------------"
-        "-"
-     << std::endl
-     << "|   Differential Optimization (DE) C++ library and test application   "
-        "|"
-     << std::endl
-     << "|                     Written by Adrian Michel                        "
-        "|"
-     << std::endl
-     << "|                      http://www.amichel.com                         "
-        "|"
-     << std::endl
-     << "|     Inspired by the C++ DE implementation by Dr. Rainer Storn at    "
-        "|"
-     << std::endl
-     << "|           http://www.icsi.berkeley.edu/~storn/code.html             "
-        "|"
-     << std::endl
-     << "----------------------------------------------------------------------"
-        "-"
-     << std::endl
+  os << "-----------------------------------------------------------------------" << std::endl
+     << "|   Differential Optimization (DE) C++ library and test application   |" << std::endl
+     << "|                     Written by Adrian Michel                        |" << std::endl
+     << "|                      http://www.amichel.com                         |" << std::endl
+     << "|     Inspired by the C++ DE implementation by Dr. Rainer Storn at    |" << std::endl
+     << "|           http://www.icsi.berkeley.edu/~storn/code.html             |" << std::endl
+     << "-----------------------------------------------------------------------" << std::endl
      << std::endl;
 }
 
