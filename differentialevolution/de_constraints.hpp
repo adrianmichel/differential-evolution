@@ -228,7 +228,7 @@ class real_constraint : public range_constraint {
     return genrand(_min, _max);
   }
 
-  virtual double get_middle_point() { return (max() + min()) / 2.0; }
+  double get_middle_point() override { return (max() + min()) / 2.0; }
 };
 
 /**
