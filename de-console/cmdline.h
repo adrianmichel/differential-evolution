@@ -18,26 +18,7 @@
 #include <de_constraints.hpp>
 #include <mutation_strategy.hpp>
 #include <selection_strategy.hpp>
-
-#include "objective_function.h"
-
-/**
- * Encapsulation of the function to optimize
- */
-class FunctionToOptimize {
-  static objective_function_ptr _functions[];
-  size_t _index;
-
- public:
-  FunctionToOptimize(size_t index);
-
-  objective_function_ptr operator()() const;
-};
-
-/**
- * Shared pointer to a FunctionToOptimize
- */
-using FunctionToOptimizePtr = std::shared_ptr<FunctionToOptimize>;
+#include <processors.hpp>
 
 /**
  * Command line class
@@ -51,7 +32,8 @@ class CmdLine {
   size_t _maxGenerations;
   amichel::de::mutation_strategy_ptr _mutationStrategy;
   bool _minimize;
-  FunctionToOptimizePtr _functionToOptimize;
+  static amichel::de::ObjectiveFunction _functions[];
+  size_t m_functionToOptimize;
   amichel::de::selection_strategy_ptr _selectionStrategy;
   size_t _processorsCount;
   amichel::de::constraints_ptr _constraints;
@@ -78,9 +60,8 @@ class CmdLine {
   bool minimize() const noexcept { return _minimize; }
   amichel::de::constraints_ptr constraints() const noexcept { return _constraints; }
   size_t argumentsCount() const noexcept { return _argumentsCount; }
-  aobjective_function_ptr functionToOptimize() const {
-    assert(_functionToOptimize);
-    return (*_functionToOptimize)();
+  amichel::de::ObjectiveFunction functionToOptimize() const {
+    return _functions[m_functionToOptimize];
   }
   amichel::de::selection_strategy_ptr selectionStrategy() const noexcept {
     assert(_selectionStrategy);

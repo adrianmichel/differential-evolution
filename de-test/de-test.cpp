@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include <objective_function.h>
 #include <differential_evolution.hpp>
 #include <test_listener.h>
 #include <test_processor_listener.h>
@@ -16,7 +15,7 @@ enum Objective {
   maximize
 };
 
-de::individual_ptr runTest(de::constraints_ptr constraints, objective_function_ptr of, de::selection_strategy_ptr selectionStrategy,
+de::individual_ptr runTest(de::constraints_ptr constraints, de::ObjectiveFunction of, de::selection_strategy_ptr selectionStrategy,
   de::mutation_strategy_ptr mutationStrategy, size_t processor_count, size_t max_generation, size_t argumentCount, size_t populationSize, Objective objective) {
   // get the constraints as defined on the command line
   assert(constraints);
@@ -33,8 +32,8 @@ de::individual_ptr runTest(de::constraints_ptr constraints, objective_function_p
 
   // instantiate the Processors, using the number of processors defined on the
   // command line, and the processors listener
-  de::processors<objective_function_ptr>::processors_ptr processors(
-    std::make_shared<de::processors<objective_function_ptr> >(
+  de::processors::processors_ptr processors(
+    std::make_shared<de::processors>(
       processor_count, of, processorListener));
 
   // instantiate a basic termination strategy (just count the # of generations)
@@ -44,7 +43,7 @@ de::individual_ptr runTest(de::constraints_ptr constraints, objective_function_p
 
   // create a differential_evolution object using all the parameters defined
   // above or on the command line
-  amichel::de::differential_evolution<objective_function_ptr> de(
+  amichel::de::differential_evolution de(
     argumentCount, populationSize, processors,
     constraints, objective == minimize, terminationStrategy, selectionStrategy,
     mutationStrategy, listener);
@@ -67,124 +66,78 @@ constexpr auto maxGeneration = 1000;
 constexpr auto weight = 0.5;
 constexpr auto crossover = 0.9;
 
+using TF = double(*)(de::DVectorPtr);
+template< typename selection_strategy, typename mutation_strategy> double testCase(de::ObjectiveFunction test_function) {
+  de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
+  (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
+  (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+
+  de::selection_strategy_ptr selectionStrategy(std::make_shared<selection_strategy>());
+  de::mutation_strategy_arguments mutation_arguments(weight, crossover);
+  de::mutation_strategy_ptr mutationStrategy(std::make_shared<mutation_strategy>(varsCount, mutation_arguments));
+
+
+  de::individual_ptr best = runTest(constraints, test_function, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
+  return best->cost();
+}
+
+class SphereFunctionClass {
+public:
+  double operator()(amichel::de::DVectorPtr args) { return SphereFunction(args); }
+};
+
 namespace de_test
 {
 	TEST_CLASS(de_test)
 	{
 	public:
-
-		TEST_METHOD(TestSphere)
-		{
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<SphereFunction>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(1e-100 > best->cost());
-		}
-
-    TEST_METHOD(TestSphere1)
+    TEST_METHOD(SphereFunctionTest0)
     {
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<SphereFunction>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(1e-100 > best->cost());
+      double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(SphereFunction);
+      // best cost is 0, but the result can be a very small value
+      Assert::IsTrue(1e-100 > bestCost);
     }
 
-    TEST_METHOD(TestSquare)
+    TEST_METHOD(SpereFunctorTest) {
+      double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(SphereFunctionClass{});
+      Assert::IsTrue(1e-100 > bestCost);
+    }
+
+    TEST_METHOD(SphereLambdaTest) {
+      auto sphere = [](de::DVectorPtr args)->double { return SphereFunction(args); };
+
+      double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(sphere);
+      Assert::IsTrue(1e-100 > bestCost);
+    }
+
+		TEST_METHOD(SphereFunctionTest1)
+		{
+      double bestCost = testCase< de::tournament_selection_strategy, de::mutation_strategy_1>(SphereFunction);
+      Assert::IsTrue(1e-100 > bestCost);
+		}
+
+    TEST_METHOD(SquareTest)
     {
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<x_sqr_min_function>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(1e-100 > best->cost());
+      double bestCost = testCase< de::tournament_selection_strategy, de::mutation_strategy_1>(x_sqr_min_function);
+      Assert::IsTrue(1e-100 > bestCost);
     }
 
     TEST_METHOD(TestSquare1)
     {
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<x_sqr_min_function>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(1e-100 > best->cost());
+      double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(x_sqr_min_function);
+      Assert::IsTrue(1e-100 > bestCost);
     }
 
     TEST_METHOD(TestSixHumpCamel)
     {
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<SixHumpCamelBackFunction>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::tournament_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(-1.031628 > best->cost() && -1.031629 < best->cost());
+      double bestCost = testCase< de::tournament_selection_strategy, de::mutation_strategy_1>(SixHumpCamelBackFunction);
+      Assert::IsTrue(-1.031628 > bestCost && -1.031629 < bestCost);
     }
 
     TEST_METHOD(TestSixHumpCamel1)
     {
-      de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-      (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-      (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
-
-      objective_function_ptr of(std::make_shared<SixHumpCamelBackFunction>());
-      de::selection_strategy_ptr selectionStrategy(std::make_shared<de::best_parent_child_selection_strategy>());
-      de::mutation_strategy_arguments mutation_arguments(weight, crossover);
-      de::mutation_strategy_ptr mutationStrategy(
-        std::make_shared<de::mutation_strategy_1>(varsCount,
-          mutation_arguments));
-
-
-      de::individual_ptr best = runTest(constraints, of, selectionStrategy, mutationStrategy, processorCount, maxGeneration, varsCount, populationSize, minimize);
-
-      Assert::IsTrue(-1.031628 > best->cost() && -1.031629 < best->cost());
+      double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(SixHumpCamelBackFunction);
+      Assert::IsTrue(-1.031628 > bestCost && -1.031629 < bestCost);
     }
   };
 };

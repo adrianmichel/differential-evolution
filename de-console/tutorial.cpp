@@ -10,7 +10,6 @@
 
 #include <differential_evolution.hpp>
 #include <iostream>
-#include "objective_function.h"
 
 using namespace amichel::de;
 
@@ -19,24 +18,17 @@ using namespace amichel::de;
  *
  * f(x,y) = x^2 + y^2
  */
-class sphere_function {
- public:
-  sphere_function()
-  //	: objective_function( "sphere function" )
-  {}
+double sphere_function(amichel::de::DVectorPtr args) {
+  /**
+    * The two function arguments are the elements index 0 and 1 in
+    * the argument vector, as defined by the constraints vector
+    * below
+    */
+  double x = (*args)[0];
+  double y = (*args)[1];
 
-  virtual double operator()(amichel::de::DVectorPtr args) {
-    /**
-     * The two function arguments are the elements index 0 and 1 in
-     * the argument vector, as defined by the constraints vector
-     * below
-     */
-    double x = (*args)[0];
-    double y = (*args)[1];
-
-    return x * x + y * y;
-  }
-};
+  return x * x + y * y;
+}
 
 #define VARS_COUNT 20
 #define POPULATION_SIZE 200
@@ -56,15 +48,6 @@ void simpleUsage() {
     (*constraints)[1] = std::make_shared<real_constraint>(-100, 100);
 
     /**
-     * Instantiate the objective function
-     *
-     * The objective function can be any function or functor that
-     * takes a de::DVectorPtr as argument and returns a double. It
-     * can be passed as a reference, pointer or shared pointer.
-     */
-    sphere_function of;
-
-    /**
      * Instantiate two null listeners, one for the differential
      * evolution, the other one for the processors
      */
@@ -77,8 +60,8 @@ void simpleUsage() {
      * parallel processors (4), the objective function and the
      * listener
      */
-    processors<sphere_function>::processors_ptr _processors(
-        std::make_shared<processors<sphere_function> >(4, boost::ref(of),
+    processors::processors_ptr _processors(
+        std::make_shared<processors >(4, boost::ref(sphere_function),
                                                          processor_listener));
 
     /**
@@ -110,7 +93,7 @@ void simpleUsage() {
      * defined constraints, processors, listener, and the various
      * strategies
      */
-    differential_evolution<sphere_function> de(
+    differential_evolution de(
         VARS_COUNT, POPULATION_SIZE, _processors, constraints, true,
         terminationStrategy, selectionStrategy, mutationStrategy, listener);
 

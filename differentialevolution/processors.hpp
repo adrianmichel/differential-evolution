@@ -155,136 +155,7 @@ class objective_function_exception : public exception {
       : exception(message.c_str()) {}
 };
 
-/**
- * Interface to an objective function factory. If the objective
- * function requires that a different instance be passed to each
- * processor, create a concrete objective_function_factory
- * derived from this class and implement the virtual make method
- * to create a new instance of the objective function.
- *
- * Use a reference or shared_ptr to an
- * objective_function_exception as processors template argument,
- * and pass the corresponding object as constructor argument.
- *
- * The corresponding processor_traits class above will ensure
- * that the right behavior is applied.
- *
- * The template argument T is the type of the objective function
- */
-template <typename T>
-class objective_function_factory {
- public:
-  /**
-   * Defines a type pointer to an objective function
-   */
-  using T_ptr = std::shared_ptr<T>;
-
-  /**
-   * virtual distructor
-   */
-  virtual ~objective_function_factory() {}
-
-  /**
-   * Method implemented in derived classes that will create new
-   * instances of the objective function
-   *
-   * @return T_ptr a smart pointer to the objective function
-   */
-  virtual T_ptr make() = 0;
-};
-
-/**
- * Base processor traits for the case where the objective
- * function is passed by reference and copied
- */
-template <typename T>
-class processor_traits {
- public:
-  // \cond
-  using value_type = T;
-  static double run(T t, de::DVectorPtr vars) { return t(vars); }
-  static T make(T t) { return t; }
-  // \endcond
-};
-
-/**
- * specialized processor traits for the case where the objective
- * function is passed as a pointer
- */
-template <typename T>
-class processor_traits<T*> {
- public:
-  // \cond
-  using value_type = T*;
-  static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
-  static value_type make(value_type t) { return t; }
-  // \endcond
-};
-
-/**
- * Specialized processor traits for the case where the objective
- * function is passed as a shared pointer
- */
-template <typename T>
-class processor_traits<std::shared_ptr<T> > {
- public:
-  // \cond
-  using value_type = std::shared_ptr<T>;
-  static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
-  static value_type make(value_type t) { return t; }
-  // \endcond
-};
-
-/**
- * Specialized processor traits for the case where the
- * processor receives a pointer to an objective function
- * factory.
- */
-template <typename T>
-class processor_traits<objective_function_factory<T>*> {
- public:
-  // \cond
-  using value_type = std::shared_ptr<T>;
-  static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
-  static value_type make(objective_function_factory<T>* off) {
-    return off->make();
-  }
-  // \endcond
-};
-/**
- * Specialized processor traits for the case where the
- * processor receives a shared pointer to an objective function
- * factory.
- */
-template <typename T>
-class processor_traits<std::shared_ptr<objective_function_factory<T> > > {
- public:
-  // \cond
-  using value_type = std::shared_ptr<T>;
-  static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
-  static value_type make(
-      std::shared_ptr<objective_function_factory<T> > off) {
-    return off->make();
-  }
-  // \endcond
-};
-
-/**
- * Specialized processor traits for the case where the
- * processor receives a reference to an objective
- * function factory.
- */
-template <typename T>
-class processor_traits<objective_function_factory<T>&> {
- public:
-  // \cond
-  using value_type = std::shared_ptr<T>;
-  static double run(value_type t, de::DVectorPtr vars) { return (*t)(vars); }
-  static value_type make(objective_function_factory<T>& off) {
-    return off.make();
-  }
-  // \endcond
-};
+using ObjectiveFunction = std::function<double(de::DVectorPtr)>;
 
 /**
  * A processor runs the objective function in one thread. There
@@ -294,10 +165,9 @@ class processor_traits<objective_function_factory<T>&> {
  * The processor class uses the type of the objective function
  * defined in the corresponding processor_traits
  */
-template <typename ObjectiveFunction>
 class processor : boost::noncopyable {
  private:
-  typename processor_traits<ObjectiveFunction>::value_type m_of;
+  ObjectiveFunction m_of;
   individual_queue& m_indQueue;
   processor_listener_ptr m_listener;
   size_t m_index;
@@ -318,7 +188,7 @@ class processor : boost::noncopyable {
    */
   processor(size_t index, ObjectiveFunction of, individual_queue& indQueue,
             processor_listener_ptr listener)
-      : m_of(processor_traits<ObjectiveFunction>::make(of)),
+      : m_of(of),
         m_indQueue(indQueue),
         m_result(false),
         m_listener(listener),
@@ -336,7 +206,7 @@ class processor : boost::noncopyable {
     try {
       for (individual_ptr ind = m_indQueue.pop(); ind; ind = m_indQueue.pop()) {
         m_listener->start_of(m_index, ind);
-        double result = processor_traits<ObjectiveFunction>::run(m_of, ind->vars());
+        double result = std::invoke(m_of, ind->vars());
 
         ind->setCost(result);
         m_listener->end_of(m_index, ind);
@@ -386,11 +256,10 @@ class processors_exception : exception {
  * function factory as argument (reference, pointer or
  * shared_ptr)
  */
-template <typename ObjectiveFunction>
 class processors {
  private:
   using thread_group_ptr = std::shared_ptr<boost::thread_group>;
-  using processor_ptr = std::shared_ptr<processor<ObjectiveFunction> >;
+  using processor_ptr = std::shared_ptr<processor>;
   using processor_vector = std::vector<processor_ptr>;
 
  private:
@@ -412,9 +281,9 @@ class processors {
     assert(listener);
 
     for (size_t n = 0; n < count; ++n) {
-      processor_ptr processor(std::make_shared<processor<ObjectiveFunction> >(
+      processor_ptr processor(std::make_shared<processor >(
           n, of, boost::ref(m_indQueue), listener));
-      m_processors.push_back(processors<ObjectiveFunction>::processor_ptr(processor));
+      m_processors.push_back(processors::processor_ptr(processor));
     }
   }
 
@@ -484,7 +353,7 @@ class processors {
   /**
    * A smart pointer to a collection of processors
    */
-  using processors_ptr = std::shared_ptr<processors<ObjectiveFunction> >;
+  using processors_ptr = std::shared_ptr<processors>;
 };
 
 }  // namespace de

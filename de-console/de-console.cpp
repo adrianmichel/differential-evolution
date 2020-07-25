@@ -14,11 +14,8 @@
 #include <test_processor_listener.h>
 
 #include "cmdline.h"
-#include "test_functions.h"
 
 using namespace amichel::de;
-
-
 
 /**
  * Runs the Differential Evolution optimization process on
@@ -32,7 +29,7 @@ void testFunctions(const CmdLine& cmdLine) {
   assert(constraints);
 
   // get the objective function as selected on the command line
-  objective_function_ptr of(cmdLine.functionToOptimize());
+  ObjectiveFunction of(cmdLine.functionToOptimize());
   assert(of);
 
   // instantiate a DE listener
@@ -44,8 +41,8 @@ void testFunctions(const CmdLine& cmdLine) {
 
   // instantiate the Processors, using the number of processors defined on the
   // command line, and the processors listener
-  processors<objective_function_ptr>::processors_ptr processors(
-      std::make_shared<processors<objective_function_ptr> >(
+  processors::processors_ptr processors(
+      std::make_shared<processors>(
           cmdLine.processorsCount(), of, processorListener));
 
   // instantiate a basic termination strategy (just count the # of generations)
@@ -60,14 +57,14 @@ void testFunctions(const CmdLine& cmdLine) {
 
   // show a message with some basic facts about the session
   std::cout << (cmdLine.minimize() ? "minimizing \"" : "maximizing \"")
-            << of->name() << "\" with weight factor " << cmdLine.weight()
+            << /*of->name() <<*/ "\" with weight factor " << cmdLine.weight()
             << " and crossover factor " << cmdLine.crossover() << std::endl
             << std::endl;
   ;
 
   // create a differential_evolution object using all the parameters defined
   // above or on the command line
-  differential_evolution<objective_function_ptr> de(
+  differential_evolution de(
       cmdLine.argumentsCount(), cmdLine.populationSize(), processors,
       constraints, cmdLine.minimize(), terminationStrategy, selectionStrategy,
       mutationStrategy, listener);

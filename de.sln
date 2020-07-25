@@ -25,7 +25,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "de-test", "de-test\de-test.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{0B6D15FF-F7BD-4DD2-9143-7D0F0764B4B6}"
 	ProjectSection(SolutionItems) = preProject
-		include\objective_function.h = include\objective_function.h
 		include\test_functions.h = include\test_functions.h
 		include\test_listener.h = include\test_listener.h
 		include\test_processor_listener.h = include\test_processor_listener.h

@@ -265,8 +265,7 @@ bool CmdLine::process(int argc, char* argv[]) {
           argumentsDefConstraintMin, argumentsDefConstraintMax);
 
       assert(vm.count(FUNCTION_TO_OPTIMIZE_LONG) > 0);
-      _functionToOptimize = std::make_shared<FunctionToOptimize>(
-          vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>());
+      m_functionToOptimize = vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>();
 
       switch (selectionStrategyIndex) {
         case 1:
@@ -335,23 +334,12 @@ void CmdLine::notice(std::ostream& os) {
      << std::endl;
 }
 
-objective_function_ptr FunctionToOptimize::_functions[] = {
-    std::make_shared<x_sqr_max_function>(),
-    std::make_shared<x_sqr_min_function>(),
-    std::make_shared<AnotherSimpleFunction>(),
-    std::make_shared<SphereFunction>(),
-    std::make_shared<AckleyFunction>(),
-    std::make_shared<SecondDeJongFunction>(),
-    std::make_shared<SixHumpCamelBackFunction>()};
-
-FunctionToOptimize::FunctionToOptimize(size_t index) : _index(--index) {}
-
-objective_function_ptr FunctionToOptimize::operator()() const {
-  if (_index < sizeof(_functions) / sizeof(objective_function_ptr))
-    return _functions[_index];
-  else
-    throw CmdLineException(
-        (boost::format("Function to optimize index not valid: %1%") %
-         (_index + 1))
-            .str());
-}
+ObjectiveFunction CmdLine::_functions[] = {
+    x_sqr_max_function,
+    x_sqr_min_function,
+    AnotherSimpleFunction,
+    SphereFunction,
+    AckleyFunction,
+    SecondDeJongFunction,
+    SixHumpCamelBackFunction
+};
