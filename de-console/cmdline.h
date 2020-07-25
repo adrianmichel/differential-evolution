@@ -67,22 +67,22 @@ class CmdLine {
   void notice(std::ostream& os);
   void showError(const std::string& error);
 
-  size_t populationSize() const { return _populationSize; }
-  size_t maxGenerations() const { return _maxGenerations; }
-  amichel::de::mutation_strategy_ptr mutationStrategy() const {
+  size_t populationSize() const noexcept { return _populationSize; }
+  size_t maxGenerations() const noexcept { return _maxGenerations; }
+  amichel::de::mutation_strategy_ptr mutationStrategy() const noexcept {
     return _mutationStrategy;
   }
-  size_t processorsCount() const { return _processorsCount; }
-  double weight() const { return _weight; }
-  double crossover() const { return _crossover; }
-  bool minimize() const { return _minimize; }
-  amichel::de::constraints_ptr constraints() const { return _constraints; }
-  size_t argumentsCount() const { return _argumentsCount; }
-  objective_function_ptr functionToOptimize() const {
+  size_t processorsCount() const noexcept { return _processorsCount; }
+  double weight() const noexcept { return _weight; }
+  double crossover() const noexcept { return _crossover; }
+  bool minimize() const noexcept { return _minimize; }
+  amichel::de::constraints_ptr constraints() const noexcept { return _constraints; }
+  size_t argumentsCount() const noexcept { return _argumentsCount; }
+  aobjective_function_ptr functionToOptimize() const {
     assert(_functionToOptimize);
     return (*_functionToOptimize)();
   }
-  amichel::de::selection_strategy_ptr selectionStrategy() const {
+  amichel::de::selection_strategy_ptr selectionStrategy() const noexcept {
     assert(_selectionStrategy);
     return _selectionStrategy;
   }
