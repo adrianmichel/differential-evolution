@@ -37,15 +37,13 @@ de::individual_ptr runTest(de::constraints_ptr constraints, de::ObjectiveFunctio
       processor_count, of, processorListener));
 
   // instantiate a basic termination strategy (just count the # of generations)
-  de::termination_strategy_ptr terminationStrategy(
-    std::make_shared<de::max_gen_termination_strategy>(
-      max_generation));
+  de::termination_strategy ts(de::max_gen_termination_strategy{ max_generation });
 
   // create a differential_evolution object using all the parameters defined
   // above or on the command line
   amichel::de::differential_evolution de(
     argumentCount, populationSize, processors,
-    constraints, objective == minimize, terminationStrategy, selectionStrategy,
+    constraints, objective == minimize, ts, selectionStrategy,
     mutationStrategy, listener);
 
   // run the optimization process
@@ -94,7 +92,7 @@ namespace de_test
     TEST_METHOD(SphereFunctionTest0)
     {
       double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(SphereFunction);
-      // best cost is 0, but the result can be a very small value
+      // best cost is 0, but the result can be a very small value 
       Assert::IsTrue(1e-100 > bestCost);
     }
 

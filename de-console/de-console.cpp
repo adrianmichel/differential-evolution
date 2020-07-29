@@ -46,9 +46,7 @@ void testFunctions(const CmdLine& cmdLine) {
           cmdLine.processorsCount(), of, processorListener));
 
   // instantiate a basic termination strategy (just count the # of generations)
-  termination_strategy_ptr terminationStrategy(
-      std::make_shared<max_gen_termination_strategy>(
-          cmdLine.maxGenerations()));
+  termination_strategy terminationStrategy(max_gen_termination_strategy(cmdLine.maxGenerations()));
 
   // instantiate the selection and mutation strategies as selected on the
   // command line

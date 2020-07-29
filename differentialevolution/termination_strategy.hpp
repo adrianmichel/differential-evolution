@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <functional>
+
 namespace amichel {
 namespace de {
 
@@ -24,10 +26,6 @@ namespace de {
  * try to minimize the number of execution steps by
  * determinining when a reasonable best value has been reached.
  */
-class termination_strategy {
- public:
-  virtual ~termination_strategy() {}
-
   /**
    * @param best The best individual so far
    * @param genCount generation number
@@ -35,8 +33,8 @@ class termination_strategy {
    * @return bool return true to continue, or false to stop the
    *  	   optimization process
    */
-  virtual bool event(individual_ptr best, size_t genCount) = 0;
-};
+
+using termination_strategy = std::function<bool(individual_ptr, size_t)>;
 
 /**
  * A smart pointer to a TerminationStrategy
@@ -48,7 +46,7 @@ using termination_strategy_ptr = std::shared_ptr<termination_strategy>;
  * optimization process if a maximum number of generations has
  * been reached
  */
-class max_gen_termination_strategy : public termination_strategy {
+class max_gen_termination_strategy{
  private:
   const size_t m_maxGen;
 
@@ -61,7 +59,7 @@ class max_gen_termination_strategy : public termination_strategy {
    */
   max_gen_termination_strategy(size_t maxGen) : m_maxGen(maxGen) {}
 
-  virtual bool event(individual_ptr best, size_t genCount) {
+  bool operator()(individual_ptr best, size_t genCount) {
     return genCount < m_maxGen;
   }
 };

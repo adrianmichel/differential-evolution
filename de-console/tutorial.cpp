@@ -68,8 +68,7 @@ void simpleUsage() {
      * Instantiate a simple termination strategy which will stop the
      * optimization process after 10000 generations
      */
-    termination_strategy_ptr terminationStrategy(
-        std::make_shared<max_gen_termination_strategy>(10000));
+    termination_strategy terminationStrategy(max_gen_termination_strategy(10000));
 
     /**
      * Instantiate the selection strategy - we'll use the best of
