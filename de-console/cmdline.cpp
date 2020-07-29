@@ -265,7 +265,7 @@ bool CmdLine::process(int argc, char* argv[]) {
           argumentsDefConstraintMin, argumentsDefConstraintMax);
 
       assert(vm.count(FUNCTION_TO_OPTIMIZE_LONG) > 0);
-      m_functionToOptimize = vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>();
+      m_functionToOptimize = vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>() - 1;
 
       switch (selectionStrategyIndex) {
         case 1:
