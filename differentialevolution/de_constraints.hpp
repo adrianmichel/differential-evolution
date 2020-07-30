@@ -331,9 +331,9 @@ class int_constraint : public range_constraint {
  */
 class set_constraint : public constraint {
  private:
-  class unique : public std::unary_function<Double, bool> {
+  class unique : public std::unary_function<double, bool> {
    public:
-    bool operator()(Double d) const { return m_unique.insert(d).second; }
+    bool operator()(double d) const { return m_unique.insert(d).second; }
 
    public:
     double min() const {
@@ -355,7 +355,7 @@ class set_constraint : public constraint {
     }
 
    private:
-    mutable std::set<Double> m_unique;
+    mutable std::set<double> m_unique;
   };
 
  private:
@@ -381,7 +381,7 @@ class set_constraint : public constraint {
    *
    * @param value
    */
-  void add_value(de::Double value) {
+  void add_value(double value) {
     if (m_unique(value)) {
       m_values.push_back(value);
     }

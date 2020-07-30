@@ -15,28 +15,8 @@
 
 namespace amichel {
 namespace de {
-/**
- * encapsulation of a double type
- * used mostly for debugging and diagnostic purposes
- */
-class Double {
- private:
-  double m_value;
 
- public:
-  Double(double value) : m_value(value) {}
-  Double() : m_value(0) {}
-
-  double operator=(double value) {
-    m_value = value;
-
-    return m_value;
-  }
-
-  operator double() const { return m_value; }
-};
-
-using DVector = std::vector<Double>;
+using DVector = std::vector<double>;
 
 /**
  * shared pointer to a DVector

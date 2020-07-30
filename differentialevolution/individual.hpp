@@ -104,7 +104,7 @@ class individual {
    *
    * @return de::Double&
    */
-  de::Double& operator[](size_t index) { return (*m_vars)[index]; }
+  double operator[](size_t index) { return (*m_vars)[index]; }
 
   /**
    * returns a constant reference to a variable value based
@@ -114,7 +114,7 @@ class individual {
    *
    * @return de::Double&
    */
-  const de::Double& operator[](size_t index) const { return (*m_vars)[index]; }
+  double operator[](size_t index) const { return (*m_vars)[index]; }
 
   /**
    * Sets the cost
