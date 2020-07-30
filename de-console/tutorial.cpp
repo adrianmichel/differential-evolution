@@ -43,7 +43,7 @@ void simpleUsage() {
      *  type real with x between -10, 10 and y between -100, 100.
      */
     constraints_ptr constraints(
-        std::make_shared<constraints>(VARS_COUNT, -1.0e6, 1.0e6));
+      std::make_shared<constraints>(VARS_COUNT, -1.0e6, 1.0e6));
     (*constraints)[0] = std::make_shared<real_constraint>(-10, 10);
     (*constraints)[1] = std::make_shared<real_constraint>(-100, 100);
 
@@ -53,7 +53,7 @@ void simpleUsage() {
      */
     listener_ptr listener(std::make_shared<null_listener>());
     processor_listener_ptr processor_listener(
-        std::make_shared<null_processor_listener>());
+      std::make_shared<null_processor_listener>());
 
     /**
      * Instantiate the collection of processors with the number of
@@ -61,8 +61,8 @@ void simpleUsage() {
      * listener
      */
     processors::processors_ptr _processors(
-        std::make_shared<processors >(4, boost::ref(sphere_function),
-                                                         processor_listener));
+      std::make_shared<processors >(4, boost::ref(sphere_function),
+        processor_listener));
 
     /**
      * Instantiate a simple termination strategy which will stop the
@@ -74,8 +74,7 @@ void simpleUsage() {
      * Instantiate the selection strategy - we'll use the best of
      * parent/child strategy
      */
-    selection_strategy_ptr selectionStrategy(
-        std::make_shared<best_parent_child_selection_strategy>());
+    selection_strategy selectionStrategy{best_parent_child_selection_strategy{}};
 
     /**
      * Instantiate the mutation strategy - we'll use the mutation

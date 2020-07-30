@@ -269,17 +269,15 @@ bool CmdLine::process(int argc, char* argv[]) {
 
       switch (selectionStrategyIndex) {
         case 1:
-          _selectionStrategy =
-              std::make_shared<best_parent_child_selection_strategy>();
+          _selectionStrategy = best_parent_child_selection_strategy();
           break;
         case 2:
-          _selectionStrategy =
-              std::make_shared<tournament_selection_strategy>();
+          _selectionStrategy = tournament_selection_strategy();
           break;
         default:
           throw CmdLineException(
               (boost::format("Invalid selection strategy: %1%") %
-               _selectionStrategy)
+                selectionStrategyIndex)
                   .str());
       }
 

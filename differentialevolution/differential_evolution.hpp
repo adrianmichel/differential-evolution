@@ -53,7 +53,7 @@ class differential_evolution {
   constraints_ptr m_constraints;
   typename processors::processors_ptr m_processors;
   termination_strategy& m_terminationStrategy;
-  selection_strategy_ptr m_selectionStrategy;
+  selection_strategy& m_selectionStrategy;
   mutation_strategy_ptr m_mutationStrategy;
   listener_ptr m_listener;
 
@@ -86,7 +86,7 @@ class differential_evolution {
                          typename processors::processors_ptr processors,
                          constraints_ptr constraints, bool minimize,
                          termination_strategy& terminationStrategy,
-                         selection_strategy_ptr selectionStrategy,
+                         selection_strategy& selectionStrategy,
                          mutation_strategy_ptr mutationStrategy,
                          de::listener_ptr listener) try
 
@@ -105,7 +105,6 @@ class differential_evolution {
     assert(processors);
     assert(constraints);
     assert(terminationStrategy);
-    assert(selectionStrategy);
     assert(listener);
     assert(mutationStrategy);
 
@@ -160,7 +159,7 @@ class differential_evolution {
         // BestParentChildSelectionStrategy()( m_pop1, m_pop2, m_bestInd,
         // m_minimize );
         m_listener->startSelection(genCount);
-        (*m_selectionStrategy)(m_pop1, m_pop2, m_bestInd, m_minimize);
+        std::invoke(m_selectionStrategy, m_pop1, m_pop2, m_bestInd, m_minimize);
         bestIndIteration = m_bestInd;
 
         m_listener->endSelection(genCount);

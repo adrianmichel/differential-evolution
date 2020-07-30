@@ -50,7 +50,7 @@ void testFunctions(const CmdLine& cmdLine) {
 
   // instantiate the selection and mutation strategies as selected on the
   // command line
-  selection_strategy_ptr selectionStrategy(cmdLine.selectionStrategy());
+  selection_strategy selectionStrategy(cmdLine.selectionStrategy());
   mutation_strategy_ptr mutationStrategy(cmdLine.mutationStrategy());
 
   // show a message with some basic facts about the session

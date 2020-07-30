@@ -16,34 +16,11 @@ namespace amichel {
 namespace de {
 
 /**
- * Abstract based class defining the interface for a selection
- * strategy.
- *
  * A selection strategy is used by Differential Evolution to
  * determine what is the best individual
  */
-class selection_strategy {
- public:
-  virtual ~selection_strategy() {}
 
-  /**
-   * applies the selection strategy
-   *
-   * @param pop1 old population
-   * @param pop2 new population
-   * @param bestInd reference to the best individual - contains
-   *  			  the best individual on return
-   * @param minimize if true, it will minimize, if false it will
-   *  			   maximize
-   */
-  virtual void operator()(population_ptr& pop1, population_ptr& pop2,
-                          individual_ptr& bestInd, bool minimize) = 0;
-};
-
-/**
- * A smart pointer to a selection strategy
- */
-using selection_strategy_ptr = std::shared_ptr<selection_strategy>;
+using selection_strategy = std::function<void(population_ptr& pop1, population_ptr& pop2, individual_ptr& bestInd, bool minimize)>;
 
 /**
  * Selection strategy that sorts all individuals across two
@@ -51,7 +28,7 @@ using selection_strategy_ptr = std::shared_ptr<selection_strategy>;
  * desired outcome - minimization or maximization of the
  * objective function
  */
-class best_parent_child_selection_strategy : public selection_strategy {
+class best_parent_child_selection_strategy {
  public:
   /**
    * applies the selection strategy
@@ -96,9 +73,7 @@ class best_parent_child_selection_strategy : public selection_strategy {
     v2.clear();
 
     std::sort(v1.begin(), v1.end(), individual_compare(minimize));
-
     v2.insert(v2.end(), v1.begin() + v1.size() / 2, v1.end());
-
     v1.erase(v1.begin() + v1.size() / 2, v1.end());
   }
 };
@@ -108,7 +83,7 @@ class best_parent_child_selection_strategy : public selection_strategy {
  * generations corresponding to the same index, and uses the
  * best one for the next generation
  */
-class tournament_selection_strategy : public selection_strategy {
+class tournament_selection_strategy {
  public:
   /**
    * applies the selection strategy

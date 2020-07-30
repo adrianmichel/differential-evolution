@@ -34,7 +34,7 @@ class CmdLine {
   bool _minimize;
   static amichel::de::ObjectiveFunction _functions[];
   size_t m_functionToOptimize;
-  amichel::de::selection_strategy_ptr _selectionStrategy;
+  amichel::de::selection_strategy _selectionStrategy;
   size_t _processorsCount;
   amichel::de::constraints_ptr _constraints;
   size_t _argumentsCount;
@@ -63,8 +63,7 @@ class CmdLine {
   amichel::de::ObjectiveFunction functionToOptimize() const {
     return _functions[m_functionToOptimize];
   }
-  amichel::de::selection_strategy_ptr selectionStrategy() const noexcept {
-    assert(_selectionStrategy);
+  const amichel::de::selection_strategy& selectionStrategy() const noexcept {
     return _selectionStrategy;
   }
 };
