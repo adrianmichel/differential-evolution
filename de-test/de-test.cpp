@@ -32,9 +32,7 @@ de::individual_ptr runTest(de::constraints_ptr constraints, de::ObjectiveFunctio
 
   // instantiate the Processors, using the number of processors defined on the
   // command line, and the processors listener
-  de::processors::processors_ptr processors(
-    std::make_shared<de::processors>(
-      processor_count, of, processorListener));
+  de::processors processors{ processor_count, of, processorListener };
 
   // instantiate a basic termination strategy (just count the # of generations)
   de::termination_strategy ts(de::max_gen_termination_strategy{ max_generation });

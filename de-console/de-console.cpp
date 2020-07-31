@@ -41,9 +41,7 @@ void testFunctions(const CmdLine& cmdLine) {
 
   // instantiate the Processors, using the number of processors defined on the
   // command line, and the processors listener
-  processors::processors_ptr processors(
-      std::make_shared<processors>(
-          cmdLine.processorsCount(), of, processorListener));
+  processors processors{ cmdLine.processorsCount(), of, processorListener };
 
   // instantiate a basic termination strategy (just count the # of generations)
   termination_strategy terminationStrategy(max_gen_termination_strategy(cmdLine.maxGenerations()));

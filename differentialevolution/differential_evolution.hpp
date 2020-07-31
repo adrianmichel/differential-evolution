@@ -51,7 +51,7 @@ class differential_evolution {
   individual_ptr m_bestInd;
 
   constraints_ptr m_constraints;
-  typename processors::processors_ptr m_processors;
+  processors& m_processors;
   termination_strategy& m_terminationStrategy;
   selection_strategy& m_selectionStrategy;
   mutation_strategy_ptr m_mutationStrategy;
@@ -83,7 +83,7 @@ class differential_evolution {
    * @param listener a listener
    */
   differential_evolution(size_t varCount, size_t popSize,
-                         typename processors::processors_ptr processors,
+                         processors& processors,
                          constraints_ptr constraints, bool minimize,
                          termination_strategy& terminationStrategy,
                          selection_strategy& selectionStrategy,
@@ -102,7 +102,6 @@ class differential_evolution {
         m_listener(listener),
         m_selectionStrategy(selectionStrategy),
         m_mutationStrategy(mutationStrategy) {
-    assert(processors);
     assert(constraints);
     assert(terminationStrategy);
     assert(listener);
@@ -113,9 +112,9 @@ class differential_evolution {
 
     // initializing population 1 by running all objective functions with
     // the initial random arguments
-    processors->push(m_pop1);
-    processors->start();
-    processors->wait();
+    processors.push(m_pop1);
+    processors.start();
+    processors.wait();
 
   } catch (const processors_exception&) {
     throw differential_evolution_exception();
@@ -144,7 +143,7 @@ class differential_evolution {
           tmpInd->ensureConstraints(m_constraints, mutationInfo.second);
 
           // populate the queue
-          m_processors->push(tmpInd);
+          m_processors.push(tmpInd);
 
           // put temps in a temp vector for now (they are empty until
           // processed), will be moved to the right place after processed
@@ -152,8 +151,8 @@ class differential_evolution {
         }
 
         m_listener->startProcessors(genCount);
-        m_processors->start();
-        m_processors->wait();
+        m_processors.start();
+        m_processors.wait();
         m_listener->endProcessors(genCount);
 
         // BestParentChildSelectionStrategy()( m_pop1, m_pop2, m_bestInd,

@@ -60,9 +60,7 @@ void simpleUsage() {
      * parallel processors (4), the objective function and the
      * listener
      */
-    processors::processors_ptr _processors(
-      std::make_shared<processors >(4, boost::ref(sphere_function),
-        processor_listener));
+    processors _processors{ 4, boost::ref(sphere_function), processor_listener };
 
     /**
      * Instantiate a simple termination strategy which will stop the
