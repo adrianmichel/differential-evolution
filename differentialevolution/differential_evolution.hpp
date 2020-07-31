@@ -139,9 +139,9 @@ class differential_evolution {
         for (size_t i = 0; i < m_popSize; ++i) {
           mutation_strategy::mutation_info mutationInfo((*m_mutationStrategy)(*m_pop1, bestIndIteration, i));
 
-          individual_ptr tmpInd(boost::tuples::get<0>(mutationInfo));
+          individual_ptr tmpInd(mutationInfo.first);
 
-          tmpInd->ensureConstraints(m_constraints, boost::tuples::get<1>(mutationInfo));
+          tmpInd->ensureConstraints(m_constraints, mutationInfo.second);
 
           // populate the queue
           m_processors->push(tmpInd);

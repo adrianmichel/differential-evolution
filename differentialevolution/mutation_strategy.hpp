@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <boost/tuple/tuple.hpp>
 #include "population.hpp"
 
 #define URN_DEPTH 5
@@ -145,9 +144,9 @@ class mutation_strategy {
       : m_args(args), m_varCount(varCount) {}
 
   /**
-   * type for the tuple returned by the operator() member.
+   * type for the pair returned by the operator() member.
    */
-  using mutation_info = boost::tuple<individual_ptr, de::DVectorPtr>;
+  using mutation_info = std::pair<individual_ptr, de::DVectorPtr>;
 
   /**
    * performs the mutation
@@ -156,7 +155,7 @@ class mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
@@ -194,7 +193,7 @@ class mutation_strategy_1 : public mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
@@ -245,7 +244,7 @@ class mutation_strategy_2 : public mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
@@ -297,7 +296,7 @@ class mutation_strategy_3 : public mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
@@ -350,7 +349,7 @@ class mutation_strategy_4 : public mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
@@ -405,7 +404,7 @@ class mutation_strategy_5 : public mutation_strategy {
    * @param bestIt the best individual of the previous generation
    * @param i the current individual index
    *
-   * @return mutation_info tuple containing the mutated individual
+   * @return mutation_info pair containing the mutated individual
    *  	   and a vector of doubles of the same size as the
    *  	   number of variables, used as origin to generate new
    *  	   values in case they exceed the limits imposed by the
