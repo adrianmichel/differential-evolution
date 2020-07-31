@@ -46,8 +46,8 @@ class differential_evolution {
   const size_t m_varCount;
   const size_t m_popSize;
 
-  population_ptr m_pop1;
-  population_ptr m_pop2;
+  population m_pop1;
+  population m_pop2;
   individual_ptr m_bestInd;
 
   const constraints& m_constraints;
@@ -92,9 +92,8 @@ class differential_evolution {
 
       : m_varCount(varCount),
         m_popSize(popSize),
-        m_pop1(std::make_shared<population>(popSize, varCount, constraints)),
-        m_pop2(std::make_shared<population>(popSize, varCount)),
-        m_bestInd(m_pop1->best(minimize)),
+        m_pop1(popSize, varCount, constraints),
+        m_pop2(popSize, varCount),
         m_constraints(constraints),
         m_processors(processors),
         m_minimize(minimize),
@@ -111,6 +110,7 @@ class differential_evolution {
 
     // initializing population 1 by running all objective functions with
     // the initial random arguments
+    m_bestInd = m_pop1.best(minimize);
     processors.push(m_pop1);
     processors.start();
     processors.wait();
@@ -135,7 +135,7 @@ class differential_evolution {
       for (size_t genCount = 0; std::invoke(m_terminationStrategy, m_bestInd, genCount); ++genCount) {
         m_listener->startGeneration(genCount);
         for (size_t i = 0; i < m_popSize; ++i) {
-          mutation_strategy::mutation_info mutationInfo((*m_mutationStrategy)(*m_pop1, bestIndIteration, i));
+          mutation_strategy::mutation_info mutationInfo((*m_mutationStrategy)(m_pop1, bestIndIteration, i));
 
           individual_ptr tmpInd(mutationInfo.first);
 
@@ -146,7 +146,7 @@ class differential_evolution {
 
           // put temps in a temp vector for now (they are empty until
           // processed), will be moved to the right place after processed
-          m_pop2->at(i) = tmpInd;
+          m_pop2.at(i) = tmpInd;
         }
 
         m_listener->startProcessors(genCount);

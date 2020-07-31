@@ -20,7 +20,7 @@ namespace de {
  * determine what is the best individual
  */
 
-using selection_strategy = std::function<void(population_ptr& pop1, population_ptr& pop2, individual_ptr& bestInd, bool minimize)>;
+using selection_strategy = std::function<void(population& pop1, population& pop2, individual_ptr& bestInd, bool minimize)>;
 
 /**
  * Selection strategy that sorts all individuals across two
@@ -40,17 +40,17 @@ class best_parent_child_selection_strategy {
    * @param minimize if true, it will minimize, if false it will
    *  			   maximize
    */
-  void operator()(population_ptr& pop1, population_ptr& pop2,
+  void operator()(population& pop1, population& pop2,
                   individual_ptr& bestInd, bool minimize) {
     assert(pop1);
     assert(pop2);
 
-    assert(pop1->size() == pop2->size());
+    assert(pop1.size() == pop2.size());
 
-    sort_across(*pop1, *pop2, minimize);
+    sort_across(pop1, pop2, minimize);
 
     // this is the best
-    bestInd = (*pop1)[0];
+    bestInd = pop1[0];
   }
 
  private:
@@ -95,20 +95,24 @@ class tournament_selection_strategy {
    * @param minimize if true, it will minimize, if false it will
    *  			   maximize
    */
-  void operator()(population_ptr& pop1, population_ptr& pop2,
+  void operator()(population& pop1, population& pop2,
                   individual_ptr& bestInd, bool minimize) {
     assert(pop1);
     assert(pop2);
 
-    assert(pop1->size() == pop2->size());
+    assert(pop1.size() == pop2.size());
 
-    for (size_t i = 0; i < pop1->size(); ++i) {
-      individual_ptr crt((*pop2)[i]);
+    for (size_t i = 0; i < pop1.size(); ++i) {
+      individual_ptr crt(pop2[i]);
 
-      if (crt->better_or_equal((*pop1)[i], minimize)) {
-        if (crt->better_or_equal(bestInd, minimize)) bestInd = crt;
-      } else
-        (*pop2)[i] = (*pop1)[i];
+      if (crt->better_or_equal(pop1[i], minimize)) {
+        if (crt->better_or_equal(bestInd, minimize)) {
+          bestInd = crt;
+        }
+      }
+      else {
+        pop2[i] = pop1[i];
+      }
     }
 
     std::swap(pop1, pop2);

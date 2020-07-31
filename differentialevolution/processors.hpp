@@ -346,8 +346,8 @@ class processors {
    *
    * @param population
    */
-  void push(population_ptr population) {
-    std::copy(population->begin(), population->end(), std::back_inserter(m_indQueue));
+  void push(population& population) {
+    std::copy(population.begin(), population.end(), std::back_inserter(m_indQueue));
   }
 
   /**
