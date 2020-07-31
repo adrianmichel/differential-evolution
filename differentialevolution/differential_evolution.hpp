@@ -148,7 +148,7 @@ class differential_evolution {
 
           // put temps in a temp vector for now (they are empty until
           // processed), will be moved to the right place after processed
-          (*m_pop2)[i] = tmpInd;
+          m_pop2->at(i) = tmpInd;
         }
 
         m_listener->startProcessors(genCount);
@@ -167,7 +167,11 @@ class differential_evolution {
         m_listener->endGeneration(genCount, bestIndIteration, m_bestInd);
       }
 
-      BOOST_SCOPE_EXIT_TPL((m_listener)) { m_listener->end(); }
+      // make sure to call listener end() on scope exit,
+      // whether due to normal end, or exception
+      BOOST_SCOPE_EXIT_TPL((m_listener)) {
+        m_listener->end();
+      }
       BOOST_SCOPE_EXIT_END
     }
     catch (const processors_exception&) {

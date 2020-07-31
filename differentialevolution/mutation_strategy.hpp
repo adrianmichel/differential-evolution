@@ -12,8 +12,6 @@
 
 #include "population.hpp"
 
-#define URN_DEPTH 5
-
 namespace amichel {
 namespace de {
 
@@ -71,6 +69,8 @@ class mutation_strategy_arguments {
   double dither() const { return m_dither; }
 };
 
+constexpr size_t urnDepth = 5;
+
 /**
  * A an abstract based class for mutation strategies
  *
@@ -91,7 +91,7 @@ class mutation_strategy {
    * index supplied externally
    */
   class Urn {
-    size_t m_urn[URN_DEPTH];
+    size_t m_urn[urnDepth];
 
    public:
     /**
@@ -103,19 +103,25 @@ class mutation_strategy {
      *  			numbers
      */
     Urn(size_t NP, size_t avoid) {
-      do
+      do {
         m_urn[0] = genintrand(0, NP, true);
+      }
       while (m_urn[0] == avoid);
-      do
+
+      do {
         m_urn[1] = genintrand(0, NP, true);
+      }
       while (m_urn[1] == m_urn[0] || m_urn[1] == avoid);
-      do
+
+      do {
         m_urn[2] = genintrand(0, NP, true);
+      }
       while (m_urn[2] == m_urn[1] || m_urn[2] == m_urn[0] || m_urn[2] == avoid);
-      do
+
+      do {
         m_urn[3] = genintrand(0, NP, true);
-      while (m_urn[3] == m_urn[2] || m_urn[3] == m_urn[1] ||
-             m_urn[3] == m_urn[0] || m_urn[3] == avoid);
+      }
+      while (m_urn[3] == m_urn[2] || m_urn[3] == m_urn[1] || m_urn[3] == m_urn[0] || m_urn[3] == avoid);
     }
 
     /**
@@ -146,7 +152,7 @@ class mutation_strategy {
   /**
    * type for the pair returned by the operator() member.
    */
-  using mutation_info = std::pair<individual_ptr, de::DVectorPtr>;
+  using mutation_info = std::pair<individual_ptr, de::DVector>;
 
   /**
    * performs the mutation
@@ -161,8 +167,7 @@ class mutation_strategy {
    *  	   values in case they exceed the limits imposed by the
    *  	   corresponding constraints
    */
-  virtual mutation_info operator()(const population& pop, individual_ptr bestIt,
-                                   size_t i) = 0;
+  virtual mutation_info operator()(const population& pop, individual_ptr bestIt, size_t i) = 0;
 
   size_t varCount() const { return m_varCount; }
   double weight() const { return m_args.weight(); }
@@ -203,24 +208,22 @@ class mutation_strategy_1 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
-    Urn urn(pop.size(), i);
+
+    individual_ptr tmpInd(std::make_shared<individual>(pop[i]->vars()));
+    const Urn urn(pop.size(), i);
 
     // make sure j is within bounds
     size_t j = genintrand(0, varCount(), true);
     size_t k = 0;
 
     do {
-      (*tmpInd->vars())[j] =
-          (*pop[urn[0]]->vars())[j] +
-          weight() * ((*pop[urn[1]]->vars())[j] - (*pop[urn[2]]->vars())[j]);
+      tmpInd->vars().at(j) = pop[urn[0]]->vars().at(j) + weight() * (pop[urn[1]]->vars().at(j) - pop[urn[2]]->vars().at(j));
 
       j = ++j % varCount();
       ++k;
     } while (genrand() < crossover() && k < varCount());
 
-    origin = pop[urn[0]]->vars();
+    de::DVector origin(pop[urn[0]]->vars());
 
     return mutation_info(tmpInd, origin);
   }
@@ -250,12 +253,10 @@ class mutation_strategy_2 : public mutation_strategy {
    *  	   values in case they exceed the limits imposed by the
    *  	   corresponding constraints
    */
-  mutation_info operator()(const population& pop, individual_ptr bestIt,
-                           size_t i) {
+  mutation_info operator()(const population& pop, individual_ptr bestIt, size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
+    individual_ptr tmpInd(std::make_shared<individual>(pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -263,16 +264,14 @@ class mutation_strategy_2 : public mutation_strategy {
     size_t k = 0;
 
     do {
-      (*tmpInd->vars())[j] =
-          (*tmpInd->vars())[j] +
-          weight() * ((*bestIt->vars())[j] - (*tmpInd->vars())[j]) +
-          weight() * ((*pop[urn[1]]->vars())[j] - (*pop[urn[2]]->vars())[j]);
+      tmpInd->vars().at(j) = tmpInd->vars().at(j) + weight() * (bestIt->vars().at(j) - tmpInd->vars().at(j)) +
+          weight() * (pop[urn[1]]->vars().at(j) - pop[urn[2]]->vars().at(j));
 
       j = ++j % varCount();
       ++k;
     } while (genrand() < crossover() && k < varCount());
 
-    origin = pop[urn[0]]->vars();
+    de::DVector origin(pop[urn[0]]->vars());
 
     return mutation_info(tmpInd, origin);
   }
@@ -306,8 +305,7 @@ class mutation_strategy_3 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
+    individual_ptr tmpInd(std::make_shared<individual>(pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -317,16 +315,15 @@ class mutation_strategy_3 : public mutation_strategy {
     do {
       double jitter = (0.0001 * genrand() + weight());
 
-      (*tmpInd->vars())[j] =
-          (*bestIt->vars())[j] +
-          jitter * ((*pop[urn[1]]->vars())[j] - (*pop[urn[2]]->vars())[j]);
+      (tmpInd->vars())[j] =
+          (bestIt->vars())[j] +
+          jitter * ((pop[urn[1]]->vars())[j] - (pop[urn[2]]->vars())[j]);
 
       j = ++j % varCount();
       ++k;
     } while (genrand() < crossover() && k < varCount());
 
-    origin = pop[urn[0]]->vars();
-
+    de::DVector origin(pop[urn[0]]->vars());
     return mutation_info(tmpInd, origin);
   }
 };
@@ -359,8 +356,7 @@ class mutation_strategy_4 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
+    individual_ptr tmpInd(std::make_shared<individual>(pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -372,16 +368,15 @@ class mutation_strategy_4 : public mutation_strategy {
     do {
       double jitter = (0.0001 * genrand() + weight());
 
-      (*tmpInd->vars())[j] =
-          (*pop[urn[0]]->vars())[j] +
-          factor * ((*pop[urn[1]]->vars())[j] - (*pop[urn[2]]->vars())[j]);
+      (tmpInd->vars())[j] =
+          (pop[urn[0]]->vars())[j] +
+          factor * ((pop[urn[1]]->vars())[j] - (pop[urn[2]]->vars())[j]);
 
       j = ++j % varCount();
       ++k;
     } while (genrand() < crossover() && k < varCount());
 
-    origin = pop[urn[0]]->vars();
-
+    de::DVector origin(pop[urn[0]]->vars());
     return mutation_info(tmpInd, origin);
   }
 };
@@ -414,8 +409,7 @@ class mutation_strategy_5 : public mutation_strategy {
                            size_t i) {
     assert(bestIt);
 
-    de::DVectorPtr origin(std::make_shared<de::DVector>(varCount()));
-    individual_ptr tmpInd(std::make_shared<individual>(*pop[i]->vars()));
+    individual_ptr tmpInd(std::make_shared<individual>(pop[i]->vars()));
     Urn urn(pop.size(), i);
 
     // make sure j is within bounds
@@ -423,15 +417,14 @@ class mutation_strategy_5 : public mutation_strategy {
     size_t k = 0;
 
     do {
-      (*tmpInd->vars())[j] =
-          (*pop[urn[0]]->vars())[j] +
-          dither() * ((*pop[urn[1]]->vars())[j] - (*pop[urn[2]]->vars())[j]);
+      tmpInd->vars().at(j) = pop[urn[0]]->vars().at(j) +
+          dither() * (pop[urn[1]]->vars().at(j) - pop[urn[2]]->vars().at(j));
 
       j = ++j % varCount();
       ++k;
     } while (genrand() < crossover() && k < varCount());
 
-    origin = pop[urn[0]]->vars();
+    de::DVector origin(pop[urn[0]]->vars());
     return mutation_info(tmpInd, origin);
   }
 };

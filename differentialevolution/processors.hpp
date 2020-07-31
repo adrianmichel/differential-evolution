@@ -155,7 +155,7 @@ class objective_function_exception : public exception {
       : exception(message.c_str()) {}
 };
 
-using ObjectiveFunction = std::function<double(de::DVectorPtr)>;
+using ObjectiveFunction = std::function<double(const de::DVector&)>;
 
 /**
  * A processor runs the objective function in one thread. There

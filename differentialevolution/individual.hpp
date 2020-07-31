@@ -32,7 +32,7 @@ using individual_ptr = std::shared_ptr<individual>;
  */
 class individual {
  private:
-  de::DVectorPtr m_vars;
+  de::DVector m_vars;
   double m_cost;
   de::mutex m_mx;
 
@@ -43,7 +43,7 @@ class individual {
    * @param varCount the number of variables for each individual
    */
   individual(size_t varCount)
-      : m_vars(std::make_shared<de::DVector>(varCount)) {}
+      : m_vars(varCount) {}
 
   /**
    * constructs an individual
@@ -52,7 +52,7 @@ class individual {
    *  		   the internal vector of variables
    */
   individual(const de::DVector& vars)
-      : m_vars(std::make_shared<de::DVector>(vars)) {}
+      : m_vars(vars) {}
 
   /**
    * Initialized the internal vector of variables with random
@@ -62,11 +62,10 @@ class individual {
    */
   void init(constraints_ptr constraints) {
     assert(constraints);
-    assert(m_vars);
-    assert(m_vars->size() == constraints->size());
+    assert(m_vars.size() == constraints->size());
 
-    for (de::DVector::size_type j = 0; j < m_vars->size(); ++j)
-      (*m_vars)[j] = constraints->get_rand_value(j);
+    for (de::DVector::size_type j = 0; j < m_vars.size(); ++j)
+      m_vars.at(j) = constraints->get_rand_value(j);
   }
 
   double cost() const { return m_cost; }
@@ -78,14 +77,12 @@ class individual {
    * @param constraints
    * @param origin
    */
-  void ensureConstraints(constraints_ptr constraints, de::DVectorPtr origin) {
+  void ensureConstraints(constraints_ptr constraints, const de::DVector& origin) {
     assert(constraints);
-    assert(m_vars);
-    assert(origin);
-    assert(m_vars->size() == constraints->size());
+    assert(m_vars.size() == constraints->size());
 
-    for (de::DVector::size_type j = 0; j < m_vars->size(); ++j) {
-      (*m_vars)[j] = constraints->get_rand_value(j, (*m_vars)[j], (*origin)[j]);
+    for (de::DVector::size_type j = 0; j < m_vars.size(); ++j) {
+      m_vars.at(j) = constraints->get_rand_value(j, m_vars.at(j), origin.at(j));
     }
   }
 
@@ -94,7 +91,7 @@ class individual {
    *
    * @return de::DVectorPtr
    */
-  de::DVectorPtr vars() const { return m_vars; }
+  de::DVector& vars() { return m_vars; }
 
   /**
    * returns a non constant reference to a variable value
@@ -104,7 +101,7 @@ class individual {
    *
    * @return de::Double&
    */
-  double operator[](size_t index) { return (*m_vars)[index]; }
+  double operator[](size_t index) { return m_vars.at(index); }
 
   /**
    * returns a constant reference to a variable value based
@@ -114,7 +111,7 @@ class individual {
    *
    * @return de::Double&
    */
-  double operator[](size_t index) const { return (*m_vars)[index]; }
+  double operator[](size_t index) const { return m_vars.at(index); }
 
   /**
    * Sets the cost
@@ -188,7 +185,7 @@ class individual {
    *
    * @return size_t
    */
-  size_t size() const { return m_vars->size(); }
+  size_t size() const { return m_vars.size(); }
 
   /**
    * returns a string representation of the internals of an
@@ -201,8 +198,8 @@ class individual {
 
     os << "cost: " << cost() << ", vars: ";
 
-    for (de::DVector::size_type j = 0; j < m_vars->size(); ++j) {
-      os << (*m_vars)[j] << ", ";
+    for (de::DVector::size_type j = 0; j < m_vars.size(); ++j) {
+      os << m_vars.at(j) << ", ";
     }
 
     return os.str();

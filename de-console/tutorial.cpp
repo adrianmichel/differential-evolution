@@ -18,14 +18,14 @@ using namespace amichel::de;
  *
  * f(x,y) = x^2 + y^2
  */
-double sphere_function(amichel::de::DVectorPtr args) {
+double sphere_function(const amichel::de::DVector& args) {
   /**
     * The two function arguments are the elements index 0 and 1 in
     * the argument vector, as defined by the constraints vector
     * below
     */
-  double x = (*args)[0];
-  double y = (*args)[1];
+  double x = args.at(0);
+  double y = args.at(1);
 
   return x * x + y * y;
 }
@@ -110,8 +110,7 @@ void simpleUsage() {
      * Print out the result
      */
     std::cout << "minimum value for the " << /*of->name() << */ " is "
-              << best->cost() << " for x=" << (*best->vars())[0]
-              << ", y=" << (*best->vars())[1];
+              << best->cost() << " for x=" << (best->vars()).at(0) << ", y=" << (best->vars()).at(1);
   } catch (const amichel::de::exception& e) {
     /**
      * Print out any errors that happened during the initialization

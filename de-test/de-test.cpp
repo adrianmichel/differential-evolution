@@ -81,7 +81,7 @@ template< typename selection_strategy, typename mutation_strategy> double testCa
 
 class SphereFunctionClass {
 public:
-  double operator()(amichel::de::DVectorPtr args) { return SphereFunction(args); }
+  double operator()(const amichel::de::DVector& args) { return SphereFunction(args); }
 };
 
 namespace de_test
@@ -102,7 +102,7 @@ namespace de_test
     }
 
     TEST_METHOD(SphereLambdaTest) {
-      auto sphere = [](de::DVectorPtr args)->double { return SphereFunction(args); };
+      auto sphere = [](const de::DVector& args)->double { return SphereFunction(args); };
 
       double bestCost = testCase< de::best_parent_child_selection_strategy, de::mutation_strategy_1>(sphere);
       Assert::IsTrue(1e-100 > bestCost);
