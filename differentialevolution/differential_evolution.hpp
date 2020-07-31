@@ -50,7 +50,7 @@ class differential_evolution {
   population_ptr m_pop2;
   individual_ptr m_bestInd;
 
-  constraints_ptr m_constraints;
+  const constraints& m_constraints;
   processors& m_processors;
   termination_strategy& m_terminationStrategy;
   selection_strategy& m_selectionStrategy;
@@ -84,7 +84,7 @@ class differential_evolution {
    */
   differential_evolution(size_t varCount, size_t popSize,
                          processors& processors,
-                         constraints_ptr constraints, bool minimize,
+                         const constraints& constraints, bool minimize,
                          termination_strategy& terminationStrategy,
                          selection_strategy& selectionStrategy,
                          mutation_strategy_ptr mutationStrategy,
@@ -102,7 +102,6 @@ class differential_evolution {
         m_listener(listener),
         m_selectionStrategy(selectionStrategy),
         m_mutationStrategy(mutationStrategy) {
-    assert(constraints);
     assert(terminationStrategy);
     assert(listener);
     assert(mutationStrategy);

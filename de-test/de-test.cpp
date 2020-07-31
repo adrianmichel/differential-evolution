@@ -15,7 +15,7 @@ enum Objective {
   maximize
 };
 
-de::individual_ptr runTest(de::constraints_ptr constraints, de::ObjectiveFunction of, de::selection_strategy& selectionStrategy,
+de::individual_ptr runTest(const de::constraints& constraints, de::ObjectiveFunction of, de::selection_strategy& selectionStrategy,
   de::mutation_strategy_ptr mutationStrategy, size_t processor_count, size_t max_generation, size_t argumentCount, size_t populationSize, Objective objective) {
   // get the constraints as defined on the command line
   assert(constraints);
@@ -64,9 +64,9 @@ constexpr auto crossover = 0.9;
 
 using TF = double(*)(de::DVectorPtr);
 template< typename selection_strategy, typename mutation_strategy> double testCase(de::ObjectiveFunction test_function) {
-  de::constraints_ptr constraints(std::make_shared<de::constraints>(varsCount, -1.0e6, 1.0e6));
-  (*constraints)[0] = std::make_shared<de::real_constraint>(-10, 10);
-  (*constraints)[1] = std::make_shared<de::real_constraint>(-100, 100);
+  de::constraints constraints(varsCount, -1.0e6, 1.0e6);
+  constraints[0] = std::make_shared<de::real_constraint>(-10, 10);
+  constraints[1] = std::make_shared<de::real_constraint>(-100, 100);
 
   de::selection_strategy selectionStrategy{ de::best_parent_child_selection_strategy{} };
   de::mutation_strategy_arguments mutation_arguments(weight, crossover);

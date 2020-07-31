@@ -42,10 +42,9 @@ void simpleUsage() {
      * -1.0e6, max 1.0e6) then set the first two elements to be of
      *  type real with x between -10, 10 and y between -100, 100.
      */
-    constraints_ptr constraints(
-      std::make_shared<constraints>(VARS_COUNT, -1.0e6, 1.0e6));
-    (*constraints)[0] = std::make_shared<real_constraint>(-10, 10);
-    (*constraints)[1] = std::make_shared<real_constraint>(-100, 100);
+    constraints constraints{ VARS_COUNT, -1.0e6, 1.0e6 };
+    constraints[0] = std::make_shared<real_constraint>(-10, 10);
+    constraints[1] = std::make_shared<real_constraint>(-100, 100);
 
     /**
      * Instantiate two null listeners, one for the differential

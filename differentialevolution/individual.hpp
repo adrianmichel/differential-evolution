@@ -60,12 +60,11 @@ class individual {
    *
    * @param constraints
    */
-  void init(constraints_ptr constraints) {
-    assert(constraints);
-    assert(m_vars.size() == constraints->size());
+  void init(const constraints& constraints) {
+    assert(m_vars.size() == constraints.size());
 
     for (de::DVector::size_type j = 0; j < m_vars.size(); ++j)
-      m_vars.at(j) = constraints->get_rand_value(j);
+      m_vars.at(j) = constraints.get_rand_value(j);
   }
 
   double cost() const { return m_cost; }
@@ -77,12 +76,11 @@ class individual {
    * @param constraints
    * @param origin
    */
-  void ensureConstraints(constraints_ptr constraints, const de::DVector& origin) {
-    assert(constraints);
-    assert(m_vars.size() == constraints->size());
+  void ensureConstraints(const constraints& constraints, const de::DVector& origin) {
+    assert(m_vars.size() == constraints.size());
 
     for (de::DVector::size_type j = 0; j < m_vars.size(); ++j) {
-      m_vars.at(j) = constraints->get_rand_value(j, m_vars.at(j), origin.at(j));
+      m_vars.at(j) = constraints.get_rand_value(j, m_vars.at(j), origin.at(j));
     }
   }
 

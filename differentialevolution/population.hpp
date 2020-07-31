@@ -48,7 +48,7 @@ class population : public population_base {
    * @param constraints constraints to use when initializing the
    *  				  individuals
    */
-  population(size_t popSize, size_t varCount, constraints_ptr constraints)
+  population(size_t popSize, size_t varCount, const constraints& constraints)
       : population_base(popSize) {
     assert(popSize > 0);
     assert(varCount > 0);

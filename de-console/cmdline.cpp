@@ -227,9 +227,6 @@ bool CmdLine::process(int argc, char* argv[]) {
 
       po::notify(vm);
 
-      double argumentsDefConstraintMin;
-      double argumentsDefConstraintMax;
-
       size_t mutationStrategyIndex;
       size_t selectionStrategyIndex;
 
@@ -241,9 +238,12 @@ bool CmdLine::process(int argc, char* argv[]) {
       SET(MUTATION_STRATEGY, mutationStrategyIndex, size_t)
       SET(PROCESSORS_COUNT, _processorsCount, size_t)
       SET(VARIABLES_COUNT, _argumentsCount, size_t)
-      SET(DEF_CONSTRAINT_MIN, argumentsDefConstraintMin, double)
-      SET(DEF_CONSTRAINT_MAX, argumentsDefConstraintMax, double)
+      SET(DEF_CONSTRAINT_MIN, m_argumentsDefConstraintMin, double)
+      SET(DEF_CONSTRAINT_MAX, m_argumentsDefConstraintMax, double)
       SET(SELECTION_STRATEGY, selectionStrategyIndex, size_t)
+
+      m_constraints = vm[CONSTRAINTS_LONG].as<std::vector<std::string> >();
+      
 
       if (weight() < minWeight || weight() > maxWeight)
         throw CmdLineException(
@@ -260,9 +260,6 @@ bool CmdLine::process(int argc, char* argv[]) {
                 .str());
 
       assert(vm.count(CONSTRAINTS_LONG) > 0);
-      _constraints = std::make_shared<amichel::de::constraints>(
-          vm[CONSTRAINTS_LONG].as<std::vector<std::string> >(), _argumentsCount,
-          argumentsDefConstraintMin, argumentsDefConstraintMax);
 
       assert(vm.count(FUNCTION_TO_OPTIMIZE_LONG) > 0);
       m_functionToOptimize = vm[FUNCTION_TO_OPTIMIZE_LONG].as<size_t>() - 1;

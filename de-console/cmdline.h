@@ -36,8 +36,10 @@ class CmdLine {
   size_t m_functionToOptimize;
   amichel::de::selection_strategy _selectionStrategy;
   size_t _processorsCount;
-  amichel::de::constraints_ptr _constraints;
   size_t _argumentsCount;
+  double m_argumentsDefConstraintMin;
+  double m_argumentsDefConstraintMax;
+  std::vector<std::string> m_constraints;
 
  public:
   CmdLine();
@@ -58,7 +60,9 @@ class CmdLine {
   double weight() const noexcept { return _weight; }
   double crossover() const noexcept { return _crossover; }
   bool minimize() const noexcept { return _minimize; }
-  amichel::de::constraints_ptr constraints() const noexcept { return _constraints; }
+  amichel::de::constraints constraints() const noexcept { 
+    return amichel::de::constraints(m_constraints, _argumentsCount, m_argumentsDefConstraintMin, m_argumentsDefConstraintMax);
+  }
   size_t argumentsCount() const noexcept { return _argumentsCount; }
   amichel::de::ObjectiveFunction functionToOptimize() const {
     return _functions[m_functionToOptimize];

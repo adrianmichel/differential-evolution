@@ -25,7 +25,7 @@ using namespace amichel::de;
  */
 void testFunctions(const CmdLine& cmdLine) {
   // get the constraints as defined on the command line
-  constraints_ptr constraints(cmdLine.constraints());
+  constraints constraints(cmdLine.constraints());
   assert(constraints);
 
   // get the objective function as selected on the command line

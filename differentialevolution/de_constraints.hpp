@@ -582,7 +582,7 @@ class constraints : public constraints_base {
    *
    * @return double
    */
-  double get_rand_value(size_t index) {
+  double get_rand_value(size_t index) const {
     if (index < constraints_base::size()) {
       return (*this)[index]->get_rand_value();
     }
@@ -602,7 +602,7 @@ class constraints : public constraints_base {
    *
    * @return double
    */
-  double get_rand_value(size_t index, double value, double origin) {
+  double get_rand_value(size_t index, double value, double origin) const {
     if (index < constraints_base::size()) {
       return (*this)[index]->get_rand_value(value, origin);
     }
